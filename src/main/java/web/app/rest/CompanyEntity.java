@@ -5,6 +5,7 @@ import java.util.List;
 import web.app.jpamodel.Company;
 import web.app.jpamodel.ObjectAddress;
 
+
 public class CompanyEntity {
 	
 	private Company companyHeader; 
