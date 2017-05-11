@@ -1,64 +1,67 @@
 package web.app.jpamodel;
 
-
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Column;
 
 @Entity
-@Table(name = "OBJECTADDRESS" )
+@Table(name = "OBJECTADDRESS")
 public class ObjectAddress {
+
+	@EmbeddedId
+    private ObjectAddressKey addressKey;
+
+	@Transient
+	private String addrType;
 	
-	 @EmbeddedId
-	 private ObjectAddressKey addressKey; 
-	 
-	 @Column(name = "FIRSTNAME", length = 50)
-	 private String firstName;
+	@Column(name = "FIRSTNAME", length = 50)
+	private String firstName;
 
-	 @Column(name = "MIDDLENAME", length = 50)
-	 private String middleName;
+	@Column(name = "MIDDLENAME", length = 50)
+	private String middleName;
 
-	 @Column(name = "LASTNAME", length = 50)
-	 private String lastName;
+	@Column(name = "LASTNAME", length = 50)
+	private String lastName;
 
-	 @Column(name = "STREET1", length = 50)
-	 private String street1;
+	@Column(name = "STREET1", length = 50)
+	private String street1;
 
-	 @Column(name = "STREET2", length = 50)
-	 private String street2;
+	@Column(name = "STREET2", length = 50)
+	private String street2;
 
-	 @Column(name = "STREET3", length = 50)
-	 private String street3;
-	 
-	 @Column(name = "HOUSENO", length = 20)
-	 private String houseNo;
+	@Column(name = "STREET3", length = 50)
+	private String street3;
 
-	 @Column(name = "BUILDINGNO", length = 30)
-	 private String buildingNo;
+	@Column(name = "HOUSENO", length = 20)
+	private String houseNo;
 
-	 @Column(name = "CITY", length = 30)
-	 private String city;
-	 
-	 @Column(name = "POSTCODE", length = 15)
-	 private String postCode;
+	@Column(name = "BUILDINGNO", length = 30)
+	private String buildingNo;
 
-	 @Column(name = "REGION", length = 30)
-	 private String region;	 
-	 
-	 @Column(name = "STATE", length = 40)
-	 private String state;
-	 
-	 @Column(name = "COUNTRY", length = 40)
-	 private String country;
-	 
-	 @Column(name = "PHONE", length = 20)
-	 private String phone;
-	 
-	 
-/* Getters and Setters */	 
+	@Column(name = "CITY", length = 30)
+	private String city;
 
-	 public ObjectAddressKey getAddressKey() {
+	@Column(name = "POSTCODE", length = 15)
+	private String postCode;
+
+	@Column(name = "REGION", length = 30)
+	private String region;
+
+	@Column(name = "STATE", length = 40)
+	private String state;
+
+	@Column(name = "COUNTRY", length = 40)
+	private String country;
+
+	@Column(name = "PHONE", length = 20)
+	private String phone;
+
+	/* Getters and Setters */
+
+	public ObjectAddressKey getAddressKey() {
 		return addressKey;
 	}
 
@@ -66,6 +69,14 @@ public class ObjectAddress {
 		this.addressKey = addressKey;
 	}
 
+	public String getAddrType() {
+		return addrType;
+	}
+
+	public void setAddrType(String addrType) {
+		this.addrType = addrType;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -177,6 +188,5 @@ public class ObjectAddress {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	 
-	 
+
 }
