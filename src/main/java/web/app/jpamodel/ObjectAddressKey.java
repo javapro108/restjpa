@@ -17,6 +17,7 @@ public class ObjectAddressKey implements Serializable{
 	
 	
 	@Column(name = "ADDRTYPE")
+	private String addrType;
 	
 	public String getObjectType() {
 		return objectType;
@@ -30,6 +31,12 @@ public class ObjectAddressKey implements Serializable{
 	public void setObjectId(long objectId) {
 		this.objectId = objectId;
 	}	
+	public String getAddrType() {
+		return addrType;
+	}
+	public void setAddrType(String addrType) {
+		this.addrType = addrType;
+	}
     
 	@Override
 	public boolean equals(Object o) {
@@ -40,14 +47,15 @@ public class ObjectAddressKey implements Serializable{
         
         ObjectAddressKey that = (ObjectAddressKey) o;
         
-        return Objects.equals(getObjectType(), that.getObjectType()) &&
-                Objects.equals(getObjectId(), that.getObjectId());
+        return Objects.equals(getObjectType(), that.getObjectType()) 
+        	&& Objects.equals(getObjectId(), that.getObjectId())
+        	&& Objects.equals(getAddrType(), that.getAddrType());
     
 	}
 	
 	@Override
     public int hashCode() {
-        return Objects.hash(getObjectType(), getObjectId());
+        return Objects.hash(getObjectType(), getObjectId(), getAddrType());
     }
 
 }

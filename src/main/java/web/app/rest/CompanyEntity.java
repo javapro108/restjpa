@@ -1,5 +1,6 @@
 package web.app.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import web.app.jpamodel.Company;
@@ -8,7 +9,7 @@ import web.app.jpamodel.ObjectAddress;
 public class CompanyEntity {
 	
 	private Company companyHeader; 
-	private List<ObjectAddress> addresses;
+	private List<ObjectAddress> addresses = new ArrayList<ObjectAddress>();
 	
 	public Company getCompanyHeader() {
 		return companyHeader;
@@ -19,8 +20,14 @@ public class CompanyEntity {
 	public List<ObjectAddress> getAddresses() {
 		return addresses;
 	}
+
 	public void setAddresses(List<ObjectAddress> addresses) {
 		this.addresses = addresses;
 	}	
+
+	public void addAddress(ObjectAddress address) {
+		this.addresses.add(address);
+	}	
+
 
 }
