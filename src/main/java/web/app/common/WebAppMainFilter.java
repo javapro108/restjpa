@@ -7,9 +7,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebListener;
+import javax.servlet.annotation.WebFilter;
 
-@WebListener
+@WebFilter(value = "/*")
 public class WebAppMainFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
