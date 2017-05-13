@@ -11,6 +11,8 @@ public class CompanyEntity {
 	
 	private Company companyHeader; 
 	private List<ObjectAddress> addresses = new ArrayList<ObjectAddress>();
+
+	
 	
 	public Company getCompanyHeader() {
 		return companyHeader;

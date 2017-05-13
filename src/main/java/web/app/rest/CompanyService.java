@@ -58,8 +58,8 @@ public class CompanyService {
 		EntityManager em = emf.createEntityManager();
 
 		em.getTransaction().begin();
-
-		em.persist(company.getCompanyHeader());
+		
+		em.merge(company.getCompanyHeader());
 		for (ObjectAddress objAddr : company.getAddresses()) {
 
 			addrKey = new ObjectAddressKey();
@@ -67,7 +67,7 @@ public class CompanyService {
 			addrKey.setObjectId(company.getCompanyHeader().getId());
 			addrKey.setAddrType(objAddr.getAddrType());
 			objAddr.setAddressKey(addrKey);
-			em.persist(objAddr);
+			em.merge(objAddr);
 			em.flush();
 			em.clear();
 

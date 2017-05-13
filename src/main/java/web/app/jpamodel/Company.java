@@ -31,6 +31,8 @@ public class Company {
 	@Column(name = "NAME2", length = 50)
 	private String name2;
 
+	
+	
 	public long getId() {
 		return id;
 	}
