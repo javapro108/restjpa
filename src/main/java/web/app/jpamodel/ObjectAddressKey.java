@@ -47,9 +47,14 @@ public class ObjectAddressKey implements Serializable{
         
         ObjectAddressKey that = (ObjectAddressKey) o;
         
-        return Objects.equals(getObjectType(), that.getObjectType()) 
-        	&& Objects.equals(getObjectId(), that.getObjectId())
-        	&& Objects.equals(getAddrType(), that.getAddrType());
+        if (Objects.equals(this.getObjectType(), that.getObjectType()) 
+        	&& Objects.equals(this.getObjectId(),   that.getObjectId())
+        	&& Objects.equals(this.getAddrType(),   that.getAddrType())){
+        	return true;
+        } else {
+        	return false;
+        }
+        
     
 	}
 	
