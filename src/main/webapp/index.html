@@ -3,7 +3,7 @@
    <head>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta charset="utf-8">
-      <title>Walkthrough</title>
+      <title>Swirnow Building Systems</title>
       <script
          id="sap-ui-bootstrap"
          src="https://openui5.hana.ondemand.com/1.44.12/resources/sap-ui-core.js"
@@ -22,11 +22,12 @@
 				            "sap/ui/core/ComponentContainer"], function(Shell, ComponentContainer) {
 				sap.ui.component({
 					async: true,
-					name: "web.app"
+					name:  "web.app"
 				}).then(function(webAppComponent) {
-					oComponentContainer = new ComponentContainer({component: webAppComponent}); 
+					 
 					new Shell({
-						app:oComponentContainer 
+						app: 			 new ComponentContainer({component: webAppComponent}),
+						appWidthLimited: false					
 					}).placeAt("content");					
 				});
 			});

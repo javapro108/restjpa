@@ -16,7 +16,6 @@ public class WebAppMainFilter implements Filter {
 			throws IOException, ServletException {
 		System.out.println("Inside WebAppMainFilter");
 		chain.doFilter(request, response);		
-		
 	}
 
 }

@@ -11,10 +11,11 @@ public class WebAppServletContextListener implements ServletContextListener{
     //Run this before web application is started
 	public void contextInitialized(ServletContextEvent event) {
 		System.out.println("ServletContextListener started");
+
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EclipseLink_H2Database");
-		event.getServletContext().setAttribute("EMF", emf);
-		
+		event.getServletContext().setAttribute("EMF", emf);		
 		System.out.println("H2 Entity Manager Factory Set");
+		
 		emf = Persistence.createEntityManagerFactory("EclipseLink_SQLServer");
 		event.getServletContext().setAttribute("SQLServerEMF", emf);
 		System.out.println("SQL Server Entity Manager Factory Set");
@@ -25,5 +26,4 @@ public class WebAppServletContextListener implements ServletContextListener{
 		System.out.println("ServletContextListener destroyed");
 	}
 
-	
 }

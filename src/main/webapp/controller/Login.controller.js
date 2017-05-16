@@ -3,9 +3,13 @@ sap.ui.define([
 ], function (Controller) {
    "use strict";
    return Controller.extend("web.app.controller.Login", {
-	   onLogin: function(){
-		   console.log("Login Pressed");
-		   window.alert("Login Pressed");
+	   
+	   onBeforeRendering: function(oEvent) {		   
+		},
+		
+	   onLogin: function(){		   
+		   sap.ui.core.UIComponent.getRouterFor(this).navTo("home");
 	   }
+
    });
 });

@@ -1,43 +1,53 @@
-<mvc:View controllerName="web.app.controller.Login" 
-	xmlns="sap.m"
-	xmlns:f="sap.ui.layout.form"
-	xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="web.app.controller.Login" xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
 	<Page title="{i18n>loginPageTitle}" class="sapUiResponsiveContentPadding">
 		<content>
 			<Panel width="auto" class="sapUiResponsiveMargin">
-				<FlexBox alignItems="Start" justifyContent="Left">
+				<HBox class="sapUiSmallMargin" 
+				    height="100%" 
+				    alignItems="Start"
+					justifyContent="Center">
 					<items>
-						<VBox class="sapUiSmallMargin">
-							<f:Form id="LoginForm" editable="true" ariaLabelledBy="Area Labelled By">
-								<f:layout>
-									<f:ResponsiveGridLayout />
-								</f:layout>
-								<f:formContainers>
-									<f:FormContainer ariaLabelledBy="Title2">
-										<f:formElements>
-											<f:FormElement label="{i18n>uName}">
-												<f:fields>
-													<Input value="" id="uName" />
-												</f:fields>
-											</f:FormElement>
-											<f:FormElement label="{i18n>password}">
-												<f:fields>
-													<Input value="" type="Password"/>
-												</f:fields>
-											</f:FormElement>
-											<f:FormElement label="">
-												<f:fields>
-													<Button text="Login" press="onLogin"/>
-												</f:fields>
-											</f:FormElement>
+						<f:Form id="LoginForm" 
+							editable="true" 
+							ariaLabelledBy="Area Labelled By">
+							<f:layout>
+								<f:ResponsiveGridLayout />
+							</f:layout>
+							<f:formContainers>
+								<f:FormContainer ariaLabelledBy="Title2">
+									<f:formElements>
+										<f:FormElement label="{i18n>uName}">
+											<f:fields>
+												<Input id="uName"
+													   value="" >
+													<!-- <layoutData> <l:GridData span="XL2 L1 M3 S4" /> </layoutData> -->
+												</Input>
+											</f:fields>
+										</f:FormElement>
+										<f:FormElement label="{i18n>password}">
+											<f:fields>
+												<Input id="password"
+													   value="" 
+													   type="Password" />
+											</f:fields>
+										</f:FormElement>
+										<f:FormElement label="">
+											<f:fields>
+												<Button text="Login" press="onLogin" />
+											</f:fields>
+											<f:fields>
+												<Button text="Change Password" press="onChangePassword" />
+											</f:fields>
 											
-										</f:formElements>
-									</f:FormContainer>
-								</f:formContainers>
-							</f:Form>
-						</VBox>
+										</f:FormElement>
+
+									</f:formElements>
+								</f:FormContainer>
+							</f:formContainers>
+						</f:Form>
 					</items>
-				</FlexBox>
+				</HBox>
 			</Panel>
 		</content>
 	</Page>
