@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="web.app.controller.Login"	
+	controllerName="web.app.controller.Home"	
 	height="100%"
 	xmlns="sap.m"
 	xmlns:tnt="sap.tnt"
@@ -36,6 +36,7 @@
  
 			</tnt:ToolHeader>
 		</tnt:header>
+
 		<tnt:sideContent>
 			<tnt:SideNavigation expanded="true"
 								itemSelect="onItemSelect">
@@ -43,7 +44,7 @@
 					<tnt:NavigationListItem text="{title}"
 											icon="{icon}"
 											enabled="{enabled}"
-											expanded="{expanded}"
+											expanded="false"
 											items="{items}"
 											key="{key}">
 						<tnt:NavigationListItem text="{title}"
@@ -61,6 +62,8 @@
 				</tnt:fixedItem>
 			</tnt:SideNavigation>
 		</tnt:sideContent>
+
+
 		<tnt:mainContents>
 			<NavContainer id="pageContainer">
 				<pages>

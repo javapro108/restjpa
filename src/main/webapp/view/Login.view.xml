@@ -20,7 +20,8 @@
 										<f:FormElement label="{i18n>uName}">
 											<f:fields>
 												<Input id="uName"
-													   value="" >
+													   value="" 
+													   placeholder = "Enter User Name">
 													<!-- <layoutData> <l:GridData span="XL2 L1 M3 S4" /> </layoutData> -->
 												</Input>
 											</f:fields>
@@ -28,7 +29,8 @@
 										<f:FormElement label="{i18n>password}">
 											<f:fields>
 												<Input id="password"
-													   value="" 
+													   value=""
+													   placeholder = "Enter User Name" 
 													   type="Password" />
 											</f:fields>
 										</f:FormElement>
