@@ -4,9 +4,9 @@
 		<content>
 			<Panel width="auto" class="sapUiResponsiveMargin">
 				<HBox class="sapUiSmallMargin" 
-				    height="100%" 
-				    alignItems="Start"
-					justifyContent="Center">
+				      height="100%"
+				      alignItems="Start"				      
+					  justifyContent="Center">
 					<items>
 						<f:Form id="LoginForm" 
 							editable="true" 
@@ -30,7 +30,7 @@
 											<f:fields>
 												<Input id="password"
 													   value=""
-													   placeholder = "Enter User Name" 
+													   placeholder = "Enter Password" 
 													   type="Password" />
 											</f:fields>
 										</f:FormElement>

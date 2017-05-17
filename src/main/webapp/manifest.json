@@ -53,14 +53,19 @@
 			},
 			"routes": [
 				{
-					"pattern": "",
 					"name": "login",
+					"pattern": "",
 					"target": "login"
 				},
 				{
-					"pattern": "home",
 					"name": "home",
+					"pattern": "home",
 					"target": "home"
+				},
+				{	
+					"name": "Company",
+					"pattern": "home/company",
+					"target": "company"
 				}
 			],
 			"targets": {
@@ -69,6 +74,12 @@
 				},
 				"home": {
 					"viewName": "Home"
+				},
+				"company": {
+					"viewName": "Company",
+					"parent": "home",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages"
 				}
 			}
 		}

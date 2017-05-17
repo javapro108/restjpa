@@ -80,10 +80,11 @@ sap.ui.define([ 'jquery.sap.global', 'sap/ui/core/Fragment',
 		},
 
 		onItemSelect : function(oEvent) {
+			debugger;
 			var item = oEvent.getParameter('item');
-			var viewId = this.getView().getId();
-			sap.ui.getCore().byId(viewId + "--pageContainer").to(
-					viewId + "--" + item.getKey());
+			item.getKey()
+			sap.ui.core.UIComponent.getRouterFor(this).navTo(item.getKey());
+
 		},
 
 		onSideNavButtonPress : function() {
