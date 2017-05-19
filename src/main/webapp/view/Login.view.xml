@@ -19,7 +19,7 @@
 									<f:formElements>
 										<f:FormElement label="{i18n>uName}">
 											<f:fields>
-												<Input id="uName"
+												<Input id="username"
 													   value="" 
 													   placeholder = "Enter User Name">
 													<!-- <layoutData> <l:GridData span="XL2 L1 M3 S4" /> </layoutData> -->

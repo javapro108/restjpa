@@ -40,12 +40,12 @@
 		<tnt:sideContent>
 			<tnt:SideNavigation expanded="true"
 								itemSelect="onItemSelect">
-				<tnt:NavigationList items="{path: '/navigation'}">
+				<tnt:NavigationList items="{path: '/navigation', templateShareable:false}">
 					<tnt:NavigationListItem text="{title}"
 											icon="{icon}"
 											enabled="{enabled}"
 											expanded="false"
-											items="{items}"
+											items="{path:'items', templateShareable:false}"
 											key="{key}">
 						<tnt:NavigationListItem text="{title}"
 												key="{key}"

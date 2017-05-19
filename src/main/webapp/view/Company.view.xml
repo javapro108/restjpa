@@ -16,7 +16,7 @@
 									<f:formElements>
 										<f:FormElement label="Company Name">
 											<f:fields>
-												<Input id="uName" value="" placeholder="Enter User Name">
+												<Input id="uName" value="" placeholder="Enter User Name" editable="false" >
 													<!-- <layoutData> <l:GridData span="XL2 L1 M3 S4" /> </layoutData> -->
 												</Input>
 											</f:fields>
