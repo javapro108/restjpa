@@ -21,7 +21,8 @@
 											<f:fields>
 												<Input id="username"
 													   value="" 
-													   placeholder = "Enter User Name">
+													   placeholder = "Enter User Name"
+													   required="true">
 													<!-- <layoutData> <l:GridData span="XL2 L1 M3 S4" /> </layoutData> -->
 												</Input>
 											</f:fields>
@@ -31,7 +32,8 @@
 												<Input id="password"
 													   value=""
 													   placeholder = "Enter Password" 
-													   type="Password" />
+													   type="Password" 
+													   required="true"/>
 											</f:fields>
 										</f:FormElement>
 										<f:FormElement label="">

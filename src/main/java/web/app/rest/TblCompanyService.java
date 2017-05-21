@@ -22,10 +22,10 @@ public class TblCompanyService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public TblCompany getCompanyEntity(@Context ServletContext context, @PathParam("id") String id) {
+	public TblCompany getCompanyEntity(@Context ServletContext context, @PathParam("id") long id) {
 
 		TblCompany tblCompany = new TblCompany();
-		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("SQLServerEMF");
+		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("EMF");
 		EntityManager em = emf.createEntityManager();
 		tblCompany = em.find(TblCompany.class, id);
 		em.close();
@@ -37,7 +37,7 @@ public class TblCompanyService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public TblCompany postCompanyEntity(@Context ServletContext context, TblCompany tblCompany) {
 
-		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("SQLServerEMF");
+		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("EMF");
 		EntityManager em = emf.createEntityManager();
 
 		em.getTransaction().begin();		

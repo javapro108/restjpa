@@ -25,6 +25,7 @@
 	},
 	"sap.ui5": {
 		"_version": "1.1.0",
+		"handleValidation": true,
 		"rootView": "web.app.view.Root",
 		"dependencies": {
 			"minUI5Version": "1.44",

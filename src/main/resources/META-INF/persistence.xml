@@ -5,6 +5,7 @@
   	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>web.app.jpamodel.ObjectAddress</class>
     <class>web.app.jpamodel.Company</class>
+    <class>web.app.jpamodel.TblCompany</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
       <property name="javax.persistence.jdbc.user" value="sa" />

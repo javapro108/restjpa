@@ -1,11 +1,8 @@
-sap.ui.define([ 'jquery.sap.global', "sap/ui/core/mvc/Controller" ], function(jQuery, Controller) {
+sap.ui.define([ 'jquery.sap.global', "sap/ui/core/mvc/Controller" ], 
+	function(jQuery, Controller) {
 	"use strict";
-	return Controller.extend("web.app.controller.Login", {
+	return Controller.extend("web.app.controller.Base", {
 
-		model : new sap.ui.model.json.JSONModel(),
-		oData : {
-			username : "username"
-		},
 
 		onBeforeRendering : function(oEvent) {
 		},

@@ -1,11 +1,15 @@
 package web.app.common;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;
 
 public class User extends LoginObject implements SecurityContext{
+	
+	private Date lastLoginTime = new Date();
+	
 	private List<String> roles;
 	@Override
 	public String getAuthenticationScheme() {
@@ -29,6 +33,12 @@ public class User extends LoginObject implements SecurityContext{
 	public boolean isUserInRole(String role) {
 		// TODO Auto-generated method stub
 		return roles.contains(role);
+	}
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
 	}
 	
 }
