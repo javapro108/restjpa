@@ -2,7 +2,7 @@
 	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core"
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page title="{control>/title}" class="sapUiContentPadding"
-		showNavButton="true">
+		showNavButton="false">
 		<headerContent>
 			<Button icon="sap-icon://save" text="Save" tooltip="Save"
 				press="onSave" />
@@ -17,7 +17,7 @@
 					ariaLabelledBy="Title1">
 					<f:layout>
 						<f:ResponsiveGridLayout labelSpanXL="3"
-							labelSpanL="2" labelSpanM="2" labelSpanS="12" adjustLabelSpan="false"
+							labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false"
 							emptySpanXL="2" emptySpanL="1" emptySpanM="1" emptySpanS="0"
 							columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false" />
 					</f:layout>
@@ -47,7 +47,7 @@
 									<f:fields>
 										<Input value="{/comPhone}" required="true" placeholder="Enter Phone Number">
 											<layoutData>
-												<l:GridData span="XL5 L5 M5 S12" />
+												<l:GridData span="XL4 L4 M4 S12" />
 											</layoutData>										
 										</Input>
 										<Input value="{/comFax}" placeholder="Enter Fax Number">
@@ -80,7 +80,7 @@
 										<TextArea value="{/comComments}" rows="4"
 											maxLength="500" placeholder="Enter Company Comments">
 											<layoutData>
-												<l:GridData span="XL9 L9 M9 S12" />
+												<l:GridData span="XL8 L8 M8 S12" />
 											</layoutData>
 										</TextArea>									
 									</f:fields>
@@ -127,7 +127,7 @@
 										</Input>
 										<Input value="{/comZip}" required="true" placeholder="Enter ZIP Code">
 											<layoutData>
-												<l:GridData span="XL4 L4 M4 S12" />
+												<l:GridData span="XL3 L3 M3 S12" />
 											</layoutData>
 										</Input>
 									</f:fields>
@@ -188,7 +188,7 @@
 										</Input>
 										<Input value="{/comMailZip}" required="true" placeholder="Enter ZIP Code">
 											<layoutData>
-												<l:GridData span="XL4 L4 M4 S12" />
+												<l:GridData span="XL3 L3 M3 S12" />
 											</layoutData>
 										</Input>
 									</f:fields>
@@ -243,7 +243,7 @@
 										</Input>
 										<Input value="{/comDeliveryZip}" placeholder="Enter ZIP Code">
 											<layoutData>
-												<l:GridData span="XL4 L4 M4 S12" />
+												<l:GridData span="XL3 L3 M3 S12" />
 											</layoutData>
 										</Input>
 									</f:fields>
