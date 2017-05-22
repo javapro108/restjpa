@@ -25,7 +25,7 @@ public class TblCompanyService {
 	public TblCompany getCompanyEntity(@Context ServletContext context, @PathParam("id") long id) {
 
 		TblCompany tblCompany = new TblCompany();
-		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("EMF");
+		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("SQLServerEMF");
 		EntityManager em = emf.createEntityManager();
 		tblCompany = em.find(TblCompany.class, id);
 		em.close();
@@ -37,7 +37,7 @@ public class TblCompanyService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public TblCompany postCompanyEntity(@Context ServletContext context, TblCompany tblCompany) {
 
-		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("EMF");
+		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("SQLServerEMF");
 		EntityManager em = emf.createEntityManager();
 
 		em.getTransaction().begin();		
