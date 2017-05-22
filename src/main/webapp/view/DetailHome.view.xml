@@ -1,0 +1,9 @@
+<mvc:View controllerName="web.app.controller.Login" xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
+	<Page title="Detail Home" class="sapUiResponsiveContentPadding">
+		<content>
+			<Panel width="auto" class="sapUiResponsiveMargin">
+			</Panel>
+		</content>
+	</Page>
+</mvc:View>

@@ -84,7 +84,13 @@ sap.ui.define([ 'jquery.sap.global', 'sap/ui/core/Fragment',
 			var item = oEvent.getParameter('item');
 			item.getKey()
 			sap.ui.core.UIComponent.getRouterFor(this).navTo(item.getKey());
-
+			if (sap.ui.Device.system.phone == true){
+				var toolPage = this.getView().byId('homePage');
+				var sideExpanded = toolPage.getSideExpanded();
+				if (sideExpanded == true){
+					toolPage.setSideExpanded(!toolPage.getSideExpanded());					
+				}
+			}
 		},
 
 		onSideNavButtonPress : function() {

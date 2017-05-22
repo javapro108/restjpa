@@ -3,13 +3,18 @@
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page title="{control>/title}" class="sapUiContentPadding"
 		showNavButton="false">
-		<headerContent>
-			<Button icon="sap-icon://save" text="Save" tooltip="Save"
-				press="onSave" />
-			<Button text="|" />
-			<Button icon="sap-icon://cancel" text="Cancel" tooltip="Cancel"
-				press="onCancel" />
-		</headerContent>
+		<customHeader>
+			<Toolbar>
+				<ToolbarSpacer width="2.5em"/>	
+				<Title text="{control>/title}" level="H4" titleStyle="H4" />
+				<ToolbarSpacer/>	
+				<Button icon="sap-icon://save" text="Save" tooltip="Save"
+					press="onSave" type="Accept"/>
+				<Button text="|" />
+				<Button icon="sap-icon://cancel" text="Cancel" tooltip="Cancel"
+					press="onCancel"  type="Reject"/>
+			</Toolbar>
+		</customHeader>
 		<ScrollContainer id="page2" horizontal="false"
 			vertical="true" height="100%">
 			<VBox class="sapUiSmallMargin">
