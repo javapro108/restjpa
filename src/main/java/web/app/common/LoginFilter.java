@@ -2,17 +2,21 @@ package web.app.common;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 @Provider
 @PreMatching
 public class LoginFilter implements ContainerRequestFilter{
-
+	
+	@Context private ServletContext context;
+	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
         
@@ -29,7 +33,7 @@ public class LoginFilter implements ContainerRequestFilter{
 		System.out.println(path);
 		System.out.println(token);
 	    try {
-	    	user = SystemServices.getUser(token);
+	    	user = SystemServices.getInstance().getUser(token);
 	    } catch(IllegalArgumentException e){
 	    	
 	    } catch(IllegalStateException e){

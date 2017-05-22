@@ -77,7 +77,7 @@
 					"viewName": "Home"
 				},
 				"company": {
-					"viewName": "Company",
+					"viewName": "company.Company",
 					"parent": "home",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages"

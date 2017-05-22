@@ -36,7 +36,7 @@ public class LoginService {
 			loginObject.setFirstName(user.getFirstName());
 			loginObject.setLastName(user.getLastName());
 			loginObject.setUserName(user.getUserName());
-			SystemServices.addLiveUser(token, user);
+			SystemServices.getInstance().addLiveUser(token, user);
 		}
 		return loginObject;
 	}

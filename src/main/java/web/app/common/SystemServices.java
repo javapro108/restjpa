@@ -5,14 +5,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SystemServices {
-	private static Map<String, User> liveUsers = new HashMap<String, User>();
-	private static Map<String, LockObject> lockObjects;
 	
-	public static void addLiveUser(String token, User user){
+	private static SystemServices instance = null;
+	private Map<String, User> liveUsers = new HashMap<String, User>();
+	private Map<String, LockObject> lockObjects;
+	
+	public static SystemServices getInstance(){
+		if (instance == null){
+			instance = new SystemServices();
+		}
+		return instance;
+	}
+	
+	public void addLiveUser(String token, User user){
 		liveUsers.put(token, user);
 	}
 	
-	public static User getUser(String token) throws IllegalArgumentException, IllegalStateException{
+	public User getUser(String token) throws IllegalArgumentException, IllegalStateException{
 		if (token == null){
 			throw new IllegalArgumentException();
 		}
@@ -30,7 +39,7 @@ public class SystemServices {
 		return user;
 	}
 	
-	public static boolean lockObject(LockObject lockObject){
+	public boolean lockObject(LockObject lockObject){
 		String key = lockObject.getObjectType() + ":" + lockObject.getObjectId();
 		LockObject lock = lockObjects.get(key);
 		if ( lock != null ){
