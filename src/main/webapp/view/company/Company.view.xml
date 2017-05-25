@@ -1,4 +1,4 @@
-<mvc:View controllerName="web.app.controller.Company" xmlns="sap.m"
+<mvc:View controllerName="web.app.controller.company.Company" xmlns="sap.m"
 	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core"
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page title="{control>/title}" class="sapUiContentPadding"

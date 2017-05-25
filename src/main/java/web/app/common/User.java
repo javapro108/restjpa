@@ -1,7 +1,9 @@
 package web.app.common;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;
@@ -10,7 +12,7 @@ public class User extends LoginObject implements SecurityContext{
 	
 	private Date lastLoginTime = new Date();
 	
-	private List<String> roles;
+	private List<String> roles = new ArrayList<String>();
 	@Override
 	public String getAuthenticationScheme() {
 		// TODO Auto-generated method stub
@@ -39,6 +41,10 @@ public class User extends LoginObject implements SecurityContext{
 	}
 	public void setLastLoginTime(Date lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
+	}
+	
+	public void addRole(String role){
+		this.roles.add(role);
 	}
 	
 }

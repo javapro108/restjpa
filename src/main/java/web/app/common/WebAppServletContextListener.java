@@ -20,6 +20,9 @@ public class WebAppServletContextListener implements ServletContextListener{
 
 		ServletContext servletCtx = event.getServletContext();
 		
+		//Set system services instance
+    	servletCtx.setAttribute("SystemServices", SystemServices.getInstance());
+		
 		KeyPairGenerator keyGen;
 		KeyPair pair;
 		PrivateKey privateKey;
