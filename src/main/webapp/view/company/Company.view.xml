@@ -1,6 +1,7 @@
 <mvc:View controllerName="web.app.controller.company.Company" xmlns="sap.m"
 	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core"
-	xmlns:mvc="sap.ui.core.mvc">
+	xmlns:mvc="sap.ui.core.mvc"
+	class="sapUiSizeCompact">
 	<Page title="{control>/title}" class="sapUiContentPadding"
 		showNavButton="false">
 		<customHeader>
@@ -38,24 +39,24 @@
 
 								<f:FormElement label="Name">
 									<f:fields>
-										<Input value="{/comName}" id="name" required="true" />
+										<Input value="{/comName}" required="true" editable ="{control>/editable}" />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="Alias">
 									<f:fields>
-										<Input value="{/comAlias}" />
+										<Input value="{/comAlias}" editable ="{control>/editable}" />
 									</f:fields>
 								</f:FormElement>
 
 
 								<f:FormElement label="Phone/Fax">
 									<f:fields>
-										<Input value="{/comPhone}" required="true" placeholder="Enter Phone Number">
+										<Input value="{/comPhone}" required="true" placeholder="Enter Phone Number" editable ="{control>/editable}">
 											<layoutData>
 												<l:GridData span="XL4 L4 M4 S12" />
 											</layoutData>										
 										</Input>
-										<Input value="{/comFax}" placeholder="Enter Fax Number">
+										<Input value="{/comFax}" placeholder="Enter Fax Number"  editable ="{control>/editable}" >
 											<layoutData>
 												<l:GridData span="XL4 L4 M4 S12" />
 											</layoutData>
@@ -65,19 +66,19 @@
 
 								<f:FormElement label="Toll Free">
 									<f:fields>
-										<Input value="{/comTollFree}" />
+										<Input value="{/comTollFree}"  editable ="{control>/editable}"  />
 									</f:fields>
 								</f:FormElement>
 
 								<f:FormElement label="Website">
 									<f:fields>
-										<Input value="{/comWeb}" />
+										<Input value="{/comWeb}"  editable ="{control>/editable}"  />
 									</f:fields>
 								</f:FormElement>
 
 								<f:FormElement label="District">
 									<f:fields>
-										<Input value="{/comDistrict}" required="true" />
+										<Input value="{/comDistrict}" required="true"  editable ="{control>/editable}"  />
 									</f:fields>
 								</f:FormElement>
 								<f:FormElement label="Comment">

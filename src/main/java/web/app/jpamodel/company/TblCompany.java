@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 public class TblCompany {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "comID", length = 10)
 	private long comID;
 

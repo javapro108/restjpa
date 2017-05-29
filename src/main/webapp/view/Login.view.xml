@@ -32,8 +32,9 @@
 												<Input id="password"
 													   value=""
 													   placeholder = "Enter Password" 
-													   type="Password" 
-													   required="true"/>
+													   type="Password" 													   
+													   required="true"
+													   submit="onLogin" />
 											</f:fields>
 										</f:FormElement>
 										<f:FormElement label="">

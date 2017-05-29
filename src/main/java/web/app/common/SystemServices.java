@@ -23,7 +23,7 @@ public class SystemServices {
 	public User getUser(String token) throws IllegalArgumentException, IllegalStateException{
 		if (token == null){
 			throw new IllegalArgumentException();
-		}
+		}		
 		User user = liveUsers.get(token);
 		if (user == null){
 			throw new IllegalArgumentException();
@@ -37,6 +37,7 @@ public class SystemServices {
 		user.setLastLoginTime(currentTime);				
 		return user;
 	}
+	
 	
 	public synchronized boolean lockObject(LockObject lockObject){
 		String key = lockObject.getObjectType() + ":" + lockObject.getObjectId();

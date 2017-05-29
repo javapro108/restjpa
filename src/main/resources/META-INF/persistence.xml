@@ -20,6 +20,7 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     	<class>web.app.jpamodel.company.TblCompany</class>
     	<class>web.app.jpamodel.company.TblCompanyComments</class>
+    	<class>web.app.jpamodel.company.SpFindCompany</class>
     	<class>web.app.jpamodel.employee.TblEmployees</class>
     	<class>web.app.jpamodel.employee.TblEmpRoles</class>
 		<properties>

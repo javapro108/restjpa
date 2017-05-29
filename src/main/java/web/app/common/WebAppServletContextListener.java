@@ -49,11 +49,11 @@ public class WebAppServletContextListener implements ServletContextListener{
 		System.out.println("ServletContextListener started");
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EclipseLink_H2Database");
-		servletCtx.setAttribute("EMF", emf);		
+		servletCtx.setAttribute(AppConstants.H2_EMF, emf);		
 		System.out.println("H2 Entity Manager Factory Set");
 		
 		emf = Persistence.createEntityManagerFactory("EclipseLink_SQLServer");
-		servletCtx.setAttribute("SQLServerEMF", emf);
+		servletCtx.setAttribute(AppConstants.MSSQL_EMF, emf);
 		System.out.println("SQL Server Entity Manager Factory Set");
 
 	}

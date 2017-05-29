@@ -35,7 +35,6 @@ public class LoginFilter implements ContainerRequestFilter{
 	    try {
 	    	user = SystemServices.getInstance().getUser(token);
 	    	requestContext.setSecurityContext(user);
-	    	servletContext.setAttribute("LoginUser", user);
 	    } catch(IllegalArgumentException e){
 	    	
 	    } catch(IllegalStateException e){

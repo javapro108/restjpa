@@ -3,7 +3,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel",
 	"use strict";
 	return Controller.extend("web.app.controller.company.Company", {
 		controlObject : {
-			editable : true,
+			editable : false,
 			title : "Create Company"
 		},
 		onInit : function() {
@@ -22,10 +22,17 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel",
 		},
 		onSave : function() {
 			debugger;
+			var thisView = this.getView(); 
 			var oModel = this.getView().getModel();
 			var oData = oModel.getData();
+			
+			var controlModel = this.getView().getModel("control");
+			controlModel.setProperty("/editable", false);
+			controlModel.refresh();
+			thisView.setBusy();			
+			
 			jQuery.ajax({
-				url : "api/tblcompany(0)",
+				url : "api/company(0)",
 				type : "POST",
 				data : JSON.stringify(oData),
 				dataType : "json",
@@ -33,14 +40,17 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel",
 				beforeSend : function(xhr) {
 					xhr.setRequestHeader("Authorization", window.localStorage.getItem("Auth-token"))
 				}
-			}).done(function(data) {
-				debugger;
-				console.log("Response " + JSON.stringify(data));
-			});
+			}).done(this.onSaveSuccess);
+			
 		},
 		onCancel : function() {
 
 		},
+		
+		onSaveSuccess: function(data){
+			var controlModel = this.getView().getModel("control");
+		},
+		
 		onEditModeChange : function() {
 			if (this.controlObject.editable == true) {
 				editable = false;

@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;
 
-public class User extends LoginObject implements SecurityContext{
+public class User extends LoginObject implements SecurityContext, Principal{
 	
 	private Date lastLoginTime = new Date();
 	
@@ -20,11 +20,7 @@ public class User extends LoginObject implements SecurityContext{
 	}
 	@Override
 	public Principal getUserPrincipal() {
-		return new Principal(){
-			public String getName() {
-		        return firstName + " " + lastName;
-		    }
-		};
+		return this;
 	}
 	@Override
 	public boolean isSecure() {
@@ -36,6 +32,13 @@ public class User extends LoginObject implements SecurityContext{
 		// TODO Auto-generated method stub
 		return roles.contains(role);
 	}
+	
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return userName;
+	}	
+	
 	public Date getLastLoginTime() {
 		return lastLoginTime;
 	}

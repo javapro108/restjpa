@@ -1,0 +1,9 @@
+<mvc:View controllerName="web.app.controller.company.CompanySearch" 
+		  xmlns="sap.m"
+		  xmlns:core="sap.ui.core"
+	 	  xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" 
+		  xmlns:mvc="sap.ui.core.mvc">
+	<Page title="{control>/title}" class="sapUiContentPadding"
+		showNavButton="false">
+	</Page>
+</mvc:View>

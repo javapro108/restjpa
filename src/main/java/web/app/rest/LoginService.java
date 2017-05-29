@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import web.app.common.AppConstants;
 import web.app.common.LoginObject;
 import web.app.common.SystemServices;
 import web.app.common.User;
@@ -51,7 +52,7 @@ public class LoginService extends ApplicationServiceBase{
 		User user = null;
 
 		TblEmployees employee = null;		
-		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute("SQLServerEMF");
+		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 		
 		employee = em.find(TblEmployees.class, uName);
