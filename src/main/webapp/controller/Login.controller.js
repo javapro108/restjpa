@@ -27,7 +27,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/ui/core/mvc/Controller", "sap/m/Messag
 						
 		},
 		
-		callAJAX: function(url, method, data, context, sucess, error){
+		callAJAX: function(url, method, data, context, success, error){
 			jQuery.ajax({
 				url:  url,
 				type: method,

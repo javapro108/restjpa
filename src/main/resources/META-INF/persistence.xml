@@ -23,11 +23,17 @@
     	<class>web.app.jpamodel.company.SpFindCompany</class>
     	<class>web.app.jpamodel.employee.TblEmployees</class>
     	<class>web.app.jpamodel.employee.TblEmpRoles</class>
+    	<class>web.app.jpamodel.contact.TblContacts</class>
+    	<class>web.app.jpamodel.contact.TblContactAffiliates</class>
+    	<class>web.app.jpamodel.contact.TblContactComments</class>
+    	<class>web.app.jpamodel.contact.TblContactReps</class>
+    	<class>web.app.jpamodel.contact.TblContactsDiscipline</class>
+    	<class>web.app.jpamodel.contact.SpFindContactResult</class>   	
 		<properties>
 			<property name="javax.persistence.jdbc.driver" 		value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
           	<property name="javax.persistence.jdbc.url" 		value="jdbc:sqlserver://localhost:1433;databaseName=db2005"></property>
            	<property name="javax.persistence.jdbc.user" 		value="sa"></property>
-           	<property name="javax.persistence.jdbc.password" 	value="passw0rd"></property>
+           	<property name="javax.persistence.jdbc.password" 	value="Shriji"></property>
 			<property name="eclipselink.target-database"    	value="org.eclipse.persistence.platform.database.SQLServerPlatform" />
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="eclipselink.logging.level" 				value="FINE" />

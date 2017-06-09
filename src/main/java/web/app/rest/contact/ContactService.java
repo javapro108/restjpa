@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,6 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import web.app.common.AppConstants;
+import web.app.common.User;
+import web.app.jpamodel.company.SpFindCompany;
+import web.app.jpamodel.contact.SpFindContactResult;
 import web.app.jpamodel.contact.TblContactAffiliates;
 import web.app.jpamodel.contact.TblContactAffiliatesKey;
 import web.app.jpamodel.contact.TblContactComments;
@@ -27,6 +31,7 @@ import web.app.jpamodel.contact.TblContacts;
 import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.TblContactsDisciplineKey;
 import web.app.rest.ApplicationServiceBase;
+import web.app.rest.company.CompanyEntity;
 
 @Path("/contacts")
 public class ContactService extends ApplicationServiceBase {
@@ -70,7 +75,7 @@ public class ContactService extends ApplicationServiceBase {
 			
 
 			//Get Contact Affiliates 
-			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery("SELECT affiliates FROM TblContactAffiliates affiliates WHERE disciplines.key.cafContactID = :contactID", TblContactAffiliates.class);
+			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery("SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.key.cafContactID = :contactID", TblContactAffiliates.class);
 			queryAffiliates.setParameter("contactID", contact.getConID());
 			affiliates = queryAffiliates.getResultList();
 			//Set selected comments to company entity
@@ -134,11 +139,7 @@ public class ContactService extends ApplicationServiceBase {
 		em.close();
 		return contactEntity;
 	}	
-        
 
-
-
-	
     @Path("/change")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -176,5 +177,54 @@ public class ContactService extends ApplicationServiceBase {
 		return contactEntity;
 	}	
 		
-	
+	@Path("/findcontactadvall")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ContactEntity findContactsAdvancedAll(@Context SecurityContext securityContext, ContactEntity contactEntity) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User)securityContext.getUserPrincipal();
+				
+		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvancedAll");
+		query.setParameter("conName", contactEntity.getContact().getConAlias());
+		query.setParameter("empID", user.getUserName());
+		//query.setParameter("Inactive", companyEntity.getCompany().getComInactive());
+		
+		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
+				
+		em.close();
+		
+		contactEntity.setResult(resultList);
+		return contactEntity;
+
+	}	
+
+	@Path("/findcontactadv")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ContactEntity findContactsAdvanced(@Context SecurityContext securityContext, ContactEntity contactEntity) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User)securityContext.getUserPrincipal();
+				
+		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvanced");
+		query.setParameter("conName", contactEntity.getContact().getConAlias());
+		query.setParameter("empID", user.getUserName());
+		query.setParameter("Inactive", contactEntity.getContact().getConInactive());
+		
+		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
+				
+		em.close();
+		
+		contactEntity.setResult(resultList);
+		return contactEntity;
+
+	}	
+    
 }

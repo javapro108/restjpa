@@ -3,6 +3,7 @@ package web.app.rest.contact;
 import java.util.ArrayList;
 import java.util.List;
 
+import web.app.jpamodel.contact.SpFindContactResult;
 import web.app.jpamodel.contact.TblContactAffiliates;
 import web.app.jpamodel.contact.TblContactComments;
 import web.app.jpamodel.contact.TblContactReps;
@@ -20,6 +21,8 @@ public class ContactEntity {
 	private List<TblContactAffiliates> affiliates = new ArrayList<TblContactAffiliates>();
 	
 	private List<TblContactReps> reps = new ArrayList<TblContactReps>();
+	
+	private List<SpFindContactResult> result = new ArrayList<SpFindContactResult>(); 
 
 	public TblContacts getContact() {
 		return contact;
@@ -60,6 +63,14 @@ public class ContactEntity {
 
 	public void setReps(List<TblContactReps> reps) {
 		this.reps = reps;
+	}
+
+	public List<SpFindContactResult> getResult() {
+		return result;
+	}
+
+	public void setResult(List<SpFindContactResult> result) {
+		this.result = result;
 	}	
 		
 

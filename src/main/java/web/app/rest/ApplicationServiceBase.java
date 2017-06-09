@@ -10,17 +10,16 @@ import web.app.common.AppConstants;
 public class ApplicationServiceBase {
 
 	@Context protected ServletContext servletContext;
-	
-	protected EntityManagerFactory emf;
+/*	protected EntityManagerFactory emf;
 	protected EntityManager em;		
 	
 
-	public ApplicationServiceBase() {
+	public ApplicationServiceBase(@Context ServletContext servletContext) {
 		super();
-		
-		emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
-		em = emf.createEntityManager();		
+		this.servletContext = servletContext;
+		this.emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		this.em = this.emf.createEntityManager();		
 				
-	}
-	
+	}	
+*/	
 }
