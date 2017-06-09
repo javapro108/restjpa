@@ -50,7 +50,10 @@
 				"viewPath": "web.app.view",
 				"controlId": "app",
 				"controlAggregation": "pages",
-				"transition": "slide"
+				"transition": "slide",
+				"bypassed": {
+					"target": "detailHome"
+				}
 			},
 			"routes": [
 				{
@@ -61,7 +64,7 @@
 				{
 					"name": "home",
 					"pattern": "home",
-					"target": "home"
+					"target": ["home","detailHome"]
 				},
 				{	
 					"name": "Company",
@@ -76,6 +79,12 @@
 				"home": {
 					"viewName": "Home"
 				},
+				"detailHome":{
+					"viewName": "DetailHome",
+					"parent": "home",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages"
+				},
 				"company": {
 					"viewName": "company.Company",
 					"parent": "home",
@@ -85,4 +94,4 @@
 			}
 		}
 	}
-}
+}	

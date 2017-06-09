@@ -14,8 +14,13 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @PreMatching
 public class LoginFilter implements ContainerRequestFilter{
+<<<<<<< HEAD
 	
 	@Context private ServletContext context;
+=======
+    
+	@Context private ServletContext servletContext;
+>>>>>>> branch 'master' of https://github.com/javapro108/restjpa.git
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -24,7 +29,7 @@ public class LoginFilter implements ContainerRequestFilter{
 		String token = "";
 		User user = null;
 		
-		if (!path.equals("login")){
+		if (path.equals("login")){
 			return;
 		}
 		
@@ -34,6 +39,10 @@ public class LoginFilter implements ContainerRequestFilter{
 		System.out.println(token);
 	    try {
 	    	user = SystemServices.getInstance().getUser(token);
+<<<<<<< HEAD
+=======
+	    	requestContext.setSecurityContext(user);
+>>>>>>> branch 'master' of https://github.com/javapro108/restjpa.git
 	    } catch(IllegalArgumentException e){
 	    	
 	    } catch(IllegalStateException e){

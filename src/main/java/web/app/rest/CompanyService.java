@@ -21,14 +21,13 @@ import web.app.jpamodel.Company;
 import web.app.jpamodel.ObjectAddress;
 import web.app.jpamodel.ObjectAddressKey;
 
-@Path("/company({id})")
+@Path("/xcompany({id})")
 public class CompanyService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public CompanyEntity getCompanyEntity(@Context ServletContext context, @PathParam("id") Long id) {
 		CompanyEntity company = new CompanyEntity();
-		ObjectAddress objAddr;
 		Company companyHeader;
 
 		EntityManagerFactory emf = (EntityManagerFactory) context.getAttribute("EMF");

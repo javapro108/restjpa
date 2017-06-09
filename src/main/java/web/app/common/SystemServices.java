@@ -5,11 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SystemServices {
+<<<<<<< HEAD
+=======
+	private static SystemServices instance = null;
+	private Map<String, User> liveUsers = new HashMap<String, User>();
+	private Map<String, LockObject> lockObjects;
+>>>>>>> branch 'master' of https://github.com/javapro108/restjpa.git
 	
+<<<<<<< HEAD
 	private static SystemServices instance = null;
 	private Map<String, User> liveUsers = new HashMap<String, User>();
 	private Map<String, LockObject> lockObjects;
 	
+=======
+>>>>>>> branch 'master' of https://github.com/javapro108/restjpa.git
 	public static SystemServices getInstance(){
 		if (instance == null){
 			instance = new SystemServices();
@@ -24,7 +33,7 @@ public class SystemServices {
 	public User getUser(String token) throws IllegalArgumentException, IllegalStateException{
 		if (token == null){
 			throw new IllegalArgumentException();
-		}
+		}		
 		User user = liveUsers.get(token);
 		if (user == null){
 			throw new IllegalArgumentException();
@@ -39,7 +48,12 @@ public class SystemServices {
 		return user;
 	}
 	
+<<<<<<< HEAD
 	public boolean lockObject(LockObject lockObject){
+=======
+	
+	public synchronized boolean lockObject(LockObject lockObject){
+>>>>>>> branch 'master' of https://github.com/javapro108/restjpa.git
 		String key = lockObject.getObjectType() + ":" + lockObject.getObjectId();
 		LockObject lock = lockObjects.get(key);
 		if ( lock != null ){

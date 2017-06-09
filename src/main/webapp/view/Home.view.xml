@@ -4,13 +4,13 @@
 	xmlns="sap.m"
 	xmlns:tnt="sap.tnt"
 	xmlns:mvc="sap.ui.core.mvc">	
-	<tnt:ToolPage id="homePage" sideExpanded="{device>/system/phone}">
+	<tnt:ToolPage id="homePage">
 		<tnt:header>
 			<tnt:ToolHeader>
 				<Button id="sideNavigationToggleButton"
 						icon="sap-icon://menu2"
 						type="Transparent"
-						press="onSideNavButtonPress">
+						press="onSideNavButtonPress"> 
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>
@@ -21,7 +21,7 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>
 				</ToolbarSpacer>				
-				<Text text="{i18n>homePageTitle}"/>
+				<Title text="{i18n>homePageTitle}"/>
 				<tnt:ToolHeaderUtilitySeparator />
 				<ToolbarSpacer>
 					<layoutData>
