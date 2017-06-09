@@ -36,4 +36,54 @@ private String cmdComment;
 
 @Column(name="cmdPriority")
 private Boolean cmdPriority;
+
+public long getCocID() {
+	return cocID;
+}
+
+public void setCocID(long cocID) {
+	this.cocID = cocID;
+}
+
+public long getCocContactID() {
+	return cocContactID;
+}
+
+public void setCocContactID(long cocContactID) {
+	this.cocContactID = cocContactID;
+}
+
+public Date getCocDate() {
+	return cocDate;
+}
+
+public void setCocDate(Date cocDate) {
+	this.cocDate = cocDate;
+}
+
+public String getCocUser() {
+	return cocUser;
+}
+
+public void setCocUser(String cocUser) {
+	this.cocUser = cocUser;
+}
+
+public String getCmdComment() {
+	return cmdComment;
+}
+
+public void setCmdComment(String cmdComment) {
+	this.cmdComment = cmdComment;
+}
+
+public Boolean getCmdPriority() {
+	return cmdPriority;
+}
+
+public void setCmdPriority(Boolean cmdPriority) {
+	this.cmdPriority = cmdPriority;
+}
+
+
 }
