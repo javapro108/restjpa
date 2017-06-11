@@ -131,9 +131,9 @@ public class CompanyService extends ApplicationServiceBase{
 		User user = (User)securityContext.getUserPrincipal();
 		
 		Query query = em.createNamedStoredProcedureQuery("spFindCompany");
-		query.setParameter("comName", companyEntity.getCompany().getComName());
+		query.setParameter("comName", companyEntity.getFindParams().getComName());
 		query.setParameter("empID", user.getUserName());
-		query.setParameter("Inactive", companyEntity.getCompany().getComInactive());
+		query.setParameter("Inactive", companyEntity.getFindParams().getComInactive());
 		
 		List<SpFindCompany> resultList = (List<SpFindCompany>)query.getResultList();
 				

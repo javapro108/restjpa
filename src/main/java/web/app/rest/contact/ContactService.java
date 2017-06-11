@@ -189,15 +189,15 @@ public class ContactService extends ApplicationServiceBase {
 		User user = (User)securityContext.getUserPrincipal();
 				
 		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvancedAll");
-		query.setParameter("conName", contactEntity.getContact().getConAlias());
+		query.setParameter("conName", contactEntity.getFindParams().getConName());
 		query.setParameter("empID", user.getUserName());
 		//query.setParameter("Inactive", companyEntity.getCompany().getComInactive());
 		
 		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
-				
+	
 		em.close();
 		
-		contactEntity.setResult(resultList);
+		contactEntity.setFindResults(resultList);
 		return contactEntity;
 
 	}	
@@ -214,15 +214,17 @@ public class ContactService extends ApplicationServiceBase {
 		User user = (User)securityContext.getUserPrincipal();
 				
 		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvanced");
-		query.setParameter("conName", contactEntity.getContact().getConAlias());
+				
+		query.setParameter("conName", contactEntity.getFindParams().getConName());
 		query.setParameter("empID", user.getUserName());
-		query.setParameter("Inactive", contactEntity.getContact().getConInactive());
+		query.setParameter("Inactive", contactEntity.getFindParams().getConInactive());
 		
 		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
-				
+		
+		
 		em.close();
 		
-		contactEntity.setResult(resultList);
+		contactEntity.setFindResults(resultList);
 		return contactEntity;
 
 	}	
