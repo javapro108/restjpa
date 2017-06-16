@@ -20,7 +20,11 @@ import javax.ws.rs.core.SecurityContext;
 
 import web.app.common.AppConstants;
 import web.app.common.User;
+import web.app.jpamodel.company.SpCompanyNewCheckParams;
+import web.app.jpamodel.company.SpCompanyNewCheckResults;
 import web.app.jpamodel.company.SpFindCompany;
+import web.app.jpamodel.contact.SpContactNewCheckParams;
+import web.app.jpamodel.contact.SpContactNewCheckResults;
 import web.app.jpamodel.contact.SpFindContactResult;
 import web.app.jpamodel.contact.TblContactAffiliates;
 import web.app.jpamodel.contact.TblContactAffiliatesKey;
@@ -228,5 +232,29 @@ public class ContactService extends ApplicationServiceBase {
 		return contactEntity;
 
 	}	
-    
+	
+	
+	@Path("/newcheck")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<SpContactNewCheckResults> spContactNewCheck(@Context SecurityContext securityContext, SpContactNewCheckParams params) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+			
+		Query query = em.createNamedStoredProcedureQuery("spContactNewCheck");
+		query.setParameter("conFName", params.getConFName().substring(0,2));
+		query.setParameter("conLName", params.getConLName());
+		
+		List<SpContactNewCheckResults> resultList = (List<SpContactNewCheckResults>)query.getResultList();
+		
+		em.close();		
+
+		return resultList;
+		
+	}
+	
+	
+	
 }

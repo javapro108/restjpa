@@ -146,7 +146,7 @@ public class CompanyService extends ApplicationServiceBase{
 
 	}
 	
-	@Path("/spcompanynewcheck")
+	@Path("/newcheck")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
