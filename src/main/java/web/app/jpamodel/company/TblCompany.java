@@ -5,6 +5,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 
 import java.util.Date;
 
@@ -12,6 +15,17 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
+
+
+@NamedStoredProcedureQuery(
+		name="spCompanyNewCheck", 
+		procedureName="spCompanyNewCheck", 
+		parameters = {
+		    @StoredProcedureParameter(name = "comName", mode=ParameterMode.IN, type = String.class),
+		    @StoredProcedureParameter(name = "theName", mode=ParameterMode.IN, type = String.class)
+		},
+		resultClasses = {SpCompanyNewCheckResults.class}
+	)
 @Entity
 @Table(name = "tblCompany", schema = "dbo")
 public class TblCompany {

@@ -24,6 +24,8 @@ import com.sun.research.ws.wadl.Application;
 
 import web.app.common.AppConstants;
 import web.app.common.User;
+import web.app.jpamodel.company.SpCompanyNewCheckParams;
+import web.app.jpamodel.company.SpCompanyNewCheckResults;
 import web.app.jpamodel.company.SpFindCompany;
 import web.app.jpamodel.company.TblCompany;
 import web.app.jpamodel.company.TblCompanyComments;
@@ -142,6 +144,28 @@ public class CompanyService extends ApplicationServiceBase{
 		companyEntity.setFindCompanyResults(resultList);
 		return companyEntity;
 
-	}	
+	}
+	
+	@Path("/spcompanynewcheck")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<SpCompanyNewCheckResults> spCompanyNewCheck(@Context SecurityContext securityContext, SpCompanyNewCheckParams params) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+			
+		Query query = em.createNamedStoredProcedureQuery("spCompanyNewCheck");
+		query.setParameter("comName", params.getComName());
+		query.setParameter("theName", params.getTheName());
+		
+		List<SpCompanyNewCheckResults> resultList = (List<SpCompanyNewCheckResults>)query.getResultList();
+		
+		em.close();		
+
+		return resultList;
+		
+	}
+	
 
 }
