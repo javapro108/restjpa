@@ -1,13 +1,22 @@
 package web.app.jpamodel.contact;
 
-public class SpContactNewCheckResults {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
+public class SpContactNewCheckResults {
+	@Id
+	@Column(name = "conID", length = 18)
 	private long conID;
 	
+	@Column(name = "conFName", length = 30)
 	private String conFName;
 	
+	@Column(name = "conLName", length = 30)
 	private String conLName;
 	
+	@Column(name = "comName", length = 50)
 	private String comName;
 
 	public long getConID() {

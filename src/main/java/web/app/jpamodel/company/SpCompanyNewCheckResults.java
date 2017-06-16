@@ -3,24 +3,23 @@ package web.app.jpamodel.company;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureParameter;
 
+@Entity
 public class SpCompanyNewCheckResults {
-	//@Column(name = "comID", length = 10)
+	@Id
+	@Column(name = "comID", length = 10)
 	private long comID;
 
-	//@Column(name = "comName", length = 50)
+	@Column(name = "comName", length = 50)
 	private String comName;
 
-	//@Column(name = "comCity", length = 50)
+	@Column(name = "comCity", length = 50)
 	private String comCity;
 
-	//@Column(name = "comState", length = 2)
+	@Column(name = "comState", length = 2)
 	private String comState;
 	
-	//@Column(name = "comZip", length = 10)
+	@Column(name = "comZip", length = 10)
 	private String comZip;
 
 	public long getComID() {
