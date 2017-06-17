@@ -29,6 +29,14 @@ import web.app.jpamodel.company.SpCompanyNewCheckResults;
 import web.app.jpamodel.company.SpFindCompany;
 import web.app.jpamodel.company.TblCompany;
 import web.app.jpamodel.company.TblCompanyComments;
+import web.app.jpamodel.company.sp.SpCompanyCommentsResults;
+import web.app.jpamodel.company.sp.SpCompanyContactActivityResults;
+import web.app.jpamodel.company.sp.SpCompanyContactsResults;
+import web.app.jpamodel.company.sp.SpCompanyJobsResults;
+import web.app.jpamodel.company.sp.SpCompanyMarketingResults;
+import web.app.jpamodel.company.sp.SpCompanyParams;
+import web.app.jpamodel.company.sp.SpCompanyProjectsResults;
+import web.app.jpamodel.company.sp.SpCompanyTableResults;
 import web.app.jpamodel.contact.TblContacts;
 import web.app.rest.ApplicationServiceBase;
 
@@ -166,6 +174,101 @@ public class CompanyService extends ApplicationServiceBase{
 		return resultList;
 		
 	}
+	
+	
+	@Path("/details")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public CompanyDetailsEntity companyDetails(@Context SecurityContext securityContext, SpCompanyParams params) {
+		
+		CompanyDetailsEntity                  companyDetails = new CompanyDetailsEntity(); 
+		SpCompanyTableResults                 company = null;
+		List<SpCompanyTableResults>           companyList = null;
+		List<SpCompanyCommentsResults>        comments = null;
+		List<SpCompanyContactsResults>        contacts = null;
+		List<SpCompanyContactActivityResults> contactActivities = null;
+		List<SpCompanyJobsResults>            jobs = null;
+		List<SpCompanyProjectsResults>        projects = null;
+		List<SpCompanyMarketingResults>       marketings = null;
+		
+		
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+			
+		// Get Company
+		Query qCompany = em.createNamedStoredProcedureQuery("sp_CompanyTable");		
+		qCompany.setParameter("comID", params.getComID());
+		qCompany.setParameter("empID", params.getEmpID());		
+		companyList = (List<SpCompanyTableResults>)qCompany.getResultList();
+		
+		// Get Comments
+		Query qComments = em.createNamedStoredProcedureQuery("spCompanyComments");
+		qComments.setParameter("comID", params.getComID());
+		comments = (List<SpCompanyCommentsResults>)qComments.getResultList();
+		
+		// Get Contacts
+		Query qContacts = em.createNamedStoredProcedureQuery("spCompanyContacts");
+		qContacts.setParameter("comID", params.getComID());
+		qContacts.setParameter("empID", params.getEmpID());
+		contacts = (List<SpCompanyContactsResults>)qContacts.getResultList();
+		
+		// Get Contact Activities
+		Query qContactActivities = em.createNamedStoredProcedureQuery("spCompanyContactActivity");
+		qContactActivities.setParameter("comID", params.getComID());
+		qContactActivities.setParameter("empID", params.getEmpID());
+		contactActivities = (List<SpCompanyContactActivityResults>)qContactActivities.getResultList();
+		
+		// Get Jobs
+		Query qJobs = em.createNamedStoredProcedureQuery("spCompanyJobs");
+		qJobs.setParameter("comID", params.getComID());
+		qJobs.setParameter("empID", params.getEmpID());
+		jobs = (List<SpCompanyJobsResults>)qJobs.getResultList();
+		
+		// Get Projects
+		Query qProjects = em.createNamedStoredProcedureQuery("spCompanyProjects");
+		qProjects.setParameter("comID", params.getComID());
+		qProjects.setParameter("empID", params.getEmpID());
+		projects = (List<SpCompanyProjectsResults>)qProjects.getResultList();
+		
+		// Get marketing
+		Query qMarketings = em.createNamedStoredProcedureQuery("spCompanyMarketing");
+		qMarketings.setParameter("comID", params.getComID());
+		marketings = (List<SpCompanyMarketingResults>)qMarketings.getResultList();
+		
+		em.close();		
+		
+		// Create display entity
+		company = companyList.iterator().next();
+		if (company != null ){
+			companyDetails.setCompany(company);
+
+			if (comments != null) {
+				companyDetails.setComments(comments);
+			};
+			if (contacts != null){
+				companyDetails.setContacts(contacts);
+			};
+			if (contactActivities != null){
+				companyDetails.setContactActivities(contactActivities);
+			};
+			if (jobs != null){
+				companyDetails.setJobs(jobs);
+			};
+			if (projects != null){
+				companyDetails.setProjects(projects);
+			};
+			if (marketings != null){
+				companyDetails.setMarketings(marketings);
+			};			
+		}
+		
+	
+		return companyDetails;	
+		
+	}
+	
+	
 	
 
 }

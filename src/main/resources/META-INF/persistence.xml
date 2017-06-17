@@ -22,6 +22,13 @@
     	<class>web.app.jpamodel.company.TblCompanyComments</class>
     	<class>web.app.jpamodel.company.SpFindCompany</class>
     	<class>web.app.jpamodel.company.SpCompanyNewCheckResults</class>
+    	<class>web.app.jpamodel.company.sp.SpCompanyCommentsResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyContactActivityResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyContactsResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyJobsResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyMarketingResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyProjectsResults</class>
+		<class>web.app.jpamodel.company.sp.SpCompanyTableResults</class>
     	<class>web.app.jpamodel.employee.TblEmployees</class>
     	<class>web.app.jpamodel.employee.TblEmpRoles</class>
     	<class>web.app.jpamodel.contact.TblContacts</class>
@@ -36,7 +43,7 @@
 			<property name="javax.persistence.jdbc.driver" 		value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
           	<property name="javax.persistence.jdbc.url" 		value="jdbc:sqlserver://localhost:1433;databaseName=db2005"></property>
            	<property name="javax.persistence.jdbc.user" 		value="sa"></property>
-           	<property name="javax.persistence.jdbc.password" 	value="Shriji"></property>
+           	<property name="javax.persistence.jdbc.password" 	value="passw0rd"></property>
 			<property name="eclipselink.target-database"    	value="org.eclipse.persistence.platform.database.SQLServerPlatform" />
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="eclipselink.logging.level" 				value="FINE" />
