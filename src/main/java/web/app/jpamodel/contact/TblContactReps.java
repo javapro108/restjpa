@@ -1,6 +1,8 @@
 package web.app.jpamodel.contact;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -12,11 +14,24 @@ import javax.persistence.EmbeddedId;
 
 
 @Entity
+@IdClass(TblContactRepsKey.class)
 @Table(name = "tblContactReps", schema = "dbo")
 public class TblContactReps {
 
-	@EmbeddedId
-	private TblContactRepsKey key;
+//	@EmbeddedId
+//	private TblContactRepsKey key;
+	
+	@Id
+	@Column(name = "corRepID", length = 3)
+	private String corRepID;
+	
+	@Id
+	@Column(name = "corAffialiateID", length = 4)
+	private String corAffialiateID;
+	
+	@Id
+	@Column(name = "corContactID", length = 18)
+	private long corContactID;	
 
 	@Column(name = "corStatus", length = 10)
 	private String corStatus;
@@ -25,14 +40,30 @@ public class TblContactReps {
 	@Column(name = "corLastContact")
 	private Date corLastContact;
 
-	public TblContactRepsKey getKey() {
-		return key;
+	public String getCorRepID() {
+		return corRepID;
 	}
 
-	public void setKey(TblContactRepsKey key) {
-		this.key = key;
+	public void setCorRepID(String corRepID) {
+		this.corRepID = corRepID;
 	}
 
+	public String getCorAffialiateID() {
+		return corAffialiateID;
+	}
+
+	public void setCorAffialiateID(String corAffialiateID) {
+		this.corAffialiateID = corAffialiateID;
+	}
+
+	public long getCorContactID() {
+		return corContactID;
+	}
+
+	public void setCorContactID(long corContactID) {
+		this.corContactID = corContactID;
+	}	
+	
 	public String getCorStatus() {
 		return corStatus;
 	}
@@ -48,6 +79,5 @@ public class TblContactReps {
 	public void setCorLastContact(Date corLastContact) {
 		this.corLastContact = corLastContact;
 	}
-	
 	
 }

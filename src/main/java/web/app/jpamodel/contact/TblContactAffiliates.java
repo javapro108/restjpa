@@ -3,17 +3,27 @@ package web.app.jpamodel.contact;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 @Entity
+@IdClass(TblContactAffiliatesKey.class)
 @Table(name = "tblContactAffiliates", schema = "dbo")
 public class TblContactAffiliates {
 
-	@EmbeddedId
-	private TblContactAffiliatesKey key;
+	//@EmbeddedId
+	//private TblContactAffiliatesKey key;
+
+	@Id
+	@Column(name="cafAffialiateID",length=2)
+	private String cafAffialiateID;
+	
+	@Id
+	@Column(name="cafContactID",length=18)
+	private long cafContactID;
 
 	@Column(name = "cafStatus", length = 10)
 	private Integer cafStatus;
@@ -21,13 +31,24 @@ public class TblContactAffiliates {
 	@Column(name = "cafstatus2", length = 10)
 	private String cafstatus2;
 
-	public TblContactAffiliatesKey getKey() {
-		return key;
+	
+	
+	public String getCafAffialiateID() {
+		return cafAffialiateID;
 	}
 
-	public void setKey(TblContactAffiliatesKey key) {
-		this.key = key;
+	public void setCafAffialiateID(String cafAffialiateID) {
+		this.cafAffialiateID = cafAffialiateID;
 	}
+
+	public long getCafContactID() {
+		return cafContactID;
+	}
+
+	public void setCafContactID(long cafContactID) {
+		this.cafContactID = cafContactID;
+	}
+	
 
 	public Integer getCafStatus() {
 		return cafStatus;

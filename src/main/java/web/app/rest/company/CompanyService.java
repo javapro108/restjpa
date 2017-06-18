@@ -197,44 +197,58 @@ public class CompanyService extends ApplicationServiceBase{
 		EntityManager em = emf.createEntityManager();
 			
 		// Get Company
-		Query qCompany = em.createNamedStoredProcedureQuery("sp_CompanyTable");		
-		qCompany.setParameter("comID", params.getComID());
-		qCompany.setParameter("empID", params.getEmpID());		
-		companyList = (List<SpCompanyTableResults>)qCompany.getResultList();
+		if ( params.getGetCompanyDetail() == true ) {		
+			Query qCompany = em.createNamedStoredProcedureQuery("sp_CompanyTable");		
+			qCompany.setParameter("comID", params.getComID());
+			qCompany.setParameter("empID", params.getEmpID());		
+			companyList = (List<SpCompanyTableResults>)qCompany.getResultList();
+		}
 		
 		// Get Comments
-		Query qComments = em.createNamedStoredProcedureQuery("spCompanyComments");
-		qComments.setParameter("comID", params.getComID());
-		comments = (List<SpCompanyCommentsResults>)qComments.getResultList();
+		if ( params.getGetComments() == true ) {
+			Query qComments = em.createNamedStoredProcedureQuery("spCompanyComments");
+			qComments.setParameter("comID", params.getComID());
+			comments = (List<SpCompanyCommentsResults>)qComments.getResultList();
+		}
 		
 		// Get Contacts
-		Query qContacts = em.createNamedStoredProcedureQuery("spCompanyContacts");
-		qContacts.setParameter("comID", params.getComID());
-		qContacts.setParameter("empID", params.getEmpID());
-		contacts = (List<SpCompanyContactsResults>)qContacts.getResultList();
+		if ( params.getGetContacts() == true ) { 
+			Query qContacts = em.createNamedStoredProcedureQuery("spCompanyContacts");
+			qContacts.setParameter("comID", params.getComID());
+			qContacts.setParameter("empID", params.getEmpID());
+			contacts = (List<SpCompanyContactsResults>)qContacts.getResultList();			
+		}
 		
 		// Get Contact Activities
-		Query qContactActivities = em.createNamedStoredProcedureQuery("spCompanyContactActivity");
-		qContactActivities.setParameter("comID", params.getComID());
-		qContactActivities.setParameter("empID", params.getEmpID());
-		contactActivities = (List<SpCompanyContactActivityResults>)qContactActivities.getResultList();
-		
+		if ( params.getGetAvtivities() == true ) {					
+			Query qContactActivities = em.createNamedStoredProcedureQuery("spCompanyContactActivity");
+			qContactActivities.setParameter("comID", params.getComID());
+			qContactActivities.setParameter("empID", params.getEmpID());
+			contactActivities = (List<SpCompanyContactActivityResults>)qContactActivities.getResultList();
+		}		
+			
 		// Get Jobs
-		Query qJobs = em.createNamedStoredProcedureQuery("spCompanyJobs");
-		qJobs.setParameter("comID", params.getComID());
-		qJobs.setParameter("empID", params.getEmpID());
-		jobs = (List<SpCompanyJobsResults>)qJobs.getResultList();
+		if ( params.getGetJobs() == true ) {
+			Query qJobs = em.createNamedStoredProcedureQuery("spCompanyJobs");
+			qJobs.setParameter("comID", params.getComID());
+			qJobs.setParameter("empID", params.getEmpID());
+			jobs = (List<SpCompanyJobsResults>)qJobs.getResultList();
+		}
 		
 		// Get Projects
-		Query qProjects = em.createNamedStoredProcedureQuery("spCompanyProjects");
-		qProjects.setParameter("comID", params.getComID());
-		qProjects.setParameter("empID", params.getEmpID());
-		projects = (List<SpCompanyProjectsResults>)qProjects.getResultList();
+		if ( params.getGetProjects() == true ) {
+			Query qProjects = em.createNamedStoredProcedureQuery("spCompanyProjects");
+			qProjects.setParameter("comID", params.getComID());
+			qProjects.setParameter("empID", params.getEmpID());
+			projects = (List<SpCompanyProjectsResults>)qProjects.getResultList();			
+		}
 		
 		// Get marketing
-		Query qMarketings = em.createNamedStoredProcedureQuery("spCompanyMarketing");
-		qMarketings.setParameter("comID", params.getComID());
-		marketings = (List<SpCompanyMarketingResults>)qMarketings.getResultList();
+		if ( params.getGetMarketing() == true ) {		
+			Query qMarketings = em.createNamedStoredProcedureQuery("spCompanyMarketing");
+			qMarketings.setParameter("comID", params.getComID());
+			marketings = (List<SpCompanyMarketingResults>)qMarketings.getResultList();
+		}
 		
 		em.close();		
 		
@@ -263,12 +277,8 @@ public class CompanyService extends ApplicationServiceBase{
 			};			
 		}
 		
-	
 		return companyDetails;	
 		
 	}
 	
-	
-	
-
 }

@@ -71,7 +71,7 @@ public class ContactService extends ApplicationServiceBase {
 			
 			
 			//Get Contact Disciplines 
-			TypedQuery<TblContactsDiscipline> queryDesciplines = em.createQuery("SELECT disciplines FROM TblContactsDiscipline disciplines WHERE disciplines.key.codContactID = :contactID", TblContactsDiscipline.class);
+			TypedQuery<TblContactsDiscipline> queryDesciplines = em.createQuery("SELECT disciplines FROM TblContactsDiscipline disciplines WHERE disciplines.codContactID = :contactID", TblContactsDiscipline.class);
 			queryDesciplines.setParameter("contactID", contact.getConID());
 			disciplines = queryDesciplines.getResultList();
 			//Set selected comments to company entity
@@ -79,7 +79,7 @@ public class ContactService extends ApplicationServiceBase {
 			
 
 			//Get Contact Affiliates 
-			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery("SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.key.cafContactID = :contactID", TblContactAffiliates.class);
+			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery("SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.cafContactID = :contactID", TblContactAffiliates.class);
 			queryAffiliates.setParameter("contactID", contact.getConID());
 			affiliates = queryAffiliates.getResultList();
 			//Set selected comments to company entity
@@ -87,7 +87,7 @@ public class ContactService extends ApplicationServiceBase {
 			
 
 			//Get Contact Reps 
-			TypedQuery<TblContactReps> queryReps = em.createQuery("SELECT reps FROM TblContactReps reps WHERE reps.key.corContactID = :contactID", TblContactReps.class);
+			TypedQuery<TblContactReps> queryReps = em.createQuery("SELECT reps FROM TblContactReps reps WHERE reps.corContactID = :contactID", TblContactReps.class);
 			queryReps.setParameter("contactID", contact.getConID());
 			reps = queryReps.getResultList();
 			//Set selected comments to company entity
@@ -120,22 +120,19 @@ public class ContactService extends ApplicationServiceBase {
 		
 		//Save Disciplines
 		for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
-			TblContactsDisciplineKey disciplineKey = discipline.getKey();			
-			disciplineKey.setCodContactID(contactEntity.getContact().getConID());			
+			discipline.setCodContactID(contactEntity.getContact().getConID());			
 			em.persist(discipline);
 		}
 
 		//Save Affiliates
 		for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
-			TblContactAffiliatesKey affiliateKey = affiliate.getKey();
-			affiliateKey.setCafContactID(contactEntity.getContact().getConID());
+			affiliate.setCafContactID(contactEntity.getContact().getConID());
 			em.persist(affiliate);
 		}
 
 		//Save Reps
 		for (TblContactReps rep : contactEntity.getReps()) {
-			TblContactRepsKey repKey = rep.getKey();
-			repKey.setCorContactID(contactEntity.getContact().getConID());
+			rep.setCorContactID(contactEntity.getContact().getConID());
 			em.persist(rep);
 		}				
 		
