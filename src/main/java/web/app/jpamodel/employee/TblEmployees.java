@@ -11,14 +11,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Column;
 
-@NamedStoredProcedureQuery(
-		name="spEmpDistricts", 
-		procedureName="spEmpDistricts", 
-		parameters = {
-				@StoredProcedureParameter(name = "emp", mode=ParameterMode.IN, type = String.class)
-		 	},
-		resultClasses = {SpEmpDistrictsResults.class}
-	)
 @Entity
 @Table(name = "tblEmployees", schema = "dbo")
 public class TblEmployees {

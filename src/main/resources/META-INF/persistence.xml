@@ -18,7 +18,9 @@
   <persistence-unit name="EclipseLink_SQLServer"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    	<class>web.app.jpamodel.company.TblCompany</class>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+<!--
+	   	<class>web.app.jpamodel.company.TblCompany</class>
     	<class>web.app.jpamodel.company.TblCompanyComments</class>
     	<class>web.app.jpamodel.company.SpFindCompany</class>
     	<class>web.app.jpamodel.company.SpCompanyNewCheckResults</class>
@@ -38,7 +40,7 @@
     	<class>web.app.jpamodel.contact.TblContactsDiscipline</class>
     	<class>web.app.jpamodel.contact.SpFindContactResult</class>   	
 		<class>web.app.jpamodel.contact.SpContactNewCheckResults</class>
-		
+-->		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" 		value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
           	<property name="javax.persistence.jdbc.url" 		value="jdbc:sqlserver://localhost:1433;databaseName=db2005"></property>
