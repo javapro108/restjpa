@@ -195,6 +195,11 @@ public class CompanyService extends ApplicationServiceBase{
 		
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
+		
+		User user = (User)securityContext.getUserPrincipal();
+		if (params.getEmpID() == null){
+			params.setEmpID(user.getUserName());
+		}
 			
 		// Get Company
 		if ( params.getGetCompanyDetail() == true ) {		

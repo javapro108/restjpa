@@ -3,7 +3,20 @@ package web.app.jpamodel.contact;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 
+
+@NamedStoredProcedureQuery(
+		name="spContactNewCheck", 
+		procedureName="spContactNewCheck", 
+		parameters = {
+		    @StoredProcedureParameter(name = "conFName", mode=ParameterMode.IN, type = String.class),
+		    @StoredProcedureParameter(name = "conLName", mode=ParameterMode.IN, type = String.class)
+		},
+		resultClasses = {SpContactNewCheckResults.class}
+	)
 @Entity
 public class SpContactNewCheckResults {
 	@Id
