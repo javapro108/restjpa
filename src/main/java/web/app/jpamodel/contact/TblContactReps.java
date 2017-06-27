@@ -6,6 +6,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import java.util.Date;
 
@@ -40,6 +41,9 @@ public class TblContactReps {
 	@Column(name = "corLastContact")
 	private Date corLastContact;
 
+	@Transient
+	private String mode;	
+	
 	public String getCorRepID() {
 		return corRepID;
 	}
@@ -78,6 +82,14 @@ public class TblContactReps {
 
 	public void setCorLastContact(Date corLastContact) {
 		this.corLastContact = corLastContact;
+	}
+	
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 	
 }

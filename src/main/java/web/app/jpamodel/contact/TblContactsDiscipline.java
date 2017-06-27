@@ -2,6 +2,7 @@ package web.app.jpamodel.contact;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Column;
@@ -21,6 +22,9 @@ public class TblContactsDiscipline {
 	@Column(name = "codDisciplineID", length = 10)
 	private String codDisciplineID;
 
+	@Transient
+	private String mode;	
+	
 	public long getCodContactID() {
 		return codContactID;
 	}
@@ -37,4 +41,14 @@ public class TblContactsDiscipline {
 		this.codDisciplineID = codDisciplineID;
 	}
 
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+
+	
 }

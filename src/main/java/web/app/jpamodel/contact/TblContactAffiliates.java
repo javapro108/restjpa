@@ -2,6 +2,7 @@ package web.app.jpamodel.contact;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Column;
@@ -31,6 +32,9 @@ public class TblContactAffiliates {
 	@Column(name = "cafstatus2", length = 10)
 	private String cafstatus2;
 
+	
+	@Transient
+	private String mode;
 	
 	
 	public String getCafAffialiateID() {
@@ -65,5 +69,15 @@ public class TblContactAffiliates {
 	public void setCafstatus2(String cafstatus2) {
 		this.cafstatus2 = cafstatus2;
 	}
+	
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	
 
 }

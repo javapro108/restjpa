@@ -89,7 +89,10 @@ public class CompanyService extends ApplicationServiceBase{
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-
+		
+		//Create company always active 
+		companyEntity.getCompany().setComInactive(false);
+		
 		em.getTransaction().begin();		
 		em.persist(companyEntity.getCompany());
 		//flush so that newly created id is reflected on entity object 
