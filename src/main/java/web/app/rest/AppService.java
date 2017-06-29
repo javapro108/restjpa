@@ -6,7 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -14,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import web.app.common.AppConstants;
+import web.app.common.LockObject;
+import web.app.common.SystemServices;
 import web.app.common.User;
 import web.app.jpamodel.common.TblAffiliates;
 import web.app.jpamodel.common.TblCountry;
@@ -23,10 +28,34 @@ import web.app.jpamodel.common.TblPrefix;
 import web.app.jpamodel.common.TblStates;
 import web.app.jpamodel.common.TblStatusCodeAff;
 import web.app.jpamodel.common.sp.SpRepDropDown;
-import web.app.jpamodel.company.SpFindCompany;
+
 
 @Path("/app")
 public class AppService extends ApplicationServiceBase {
+	
+	@Path("/lock")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean lockObject(@Context ServletContext context, LockObject lockObject) {
+		
+		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+		return sysService.lockObject(lockObject);
+		
+	}
+	
+	
+	@Path("/unlock")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean unLockObject(@Context ServletContext context, LockObject lockObject) {
+		
+		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+		return sysService.unLockObject(lockObject);
+		
+	}
+	
 	
 	@Path("/states")
 	@GET
@@ -46,6 +75,7 @@ public class AppService extends ApplicationServiceBase {
 		
 	}
 
+	
 	@Path("/countries")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)	

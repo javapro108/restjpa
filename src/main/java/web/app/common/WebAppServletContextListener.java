@@ -14,14 +14,16 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class WebAppServletContextListener implements ServletContextListener{
-
+ 
     //Run this before web application is started
 	public void contextInitialized(ServletContextEvent event) {
 
 		ServletContext servletCtx = event.getServletContext();
 		
 		//Set system services instance
-    	servletCtx.setAttribute("SystemServices", SystemServices.getInstance());
+    	servletCtx.setAttribute(AppConstants.SYSTEM_SERVICE, SystemServices.getInstance());
+    	SystemServices.getInstance().setName("System Service Thread");
+    	SystemServices.getInstance().start();
 		
 		KeyPairGenerator keyGen;
 		KeyPair pair;
@@ -59,7 +61,9 @@ public class WebAppServletContextListener implements ServletContextListener{
 	}
 		
 	public void contextDestroyed(ServletContextEvent event) {
-		System.out.println("ServletContextListener destroyed");
+		System.out.println("ServletContextListener destroyed");		
+		SystemServices.getInstance().stopService();
+		SystemServices.getInstance().interrupt();
 	}
 
 }

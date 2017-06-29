@@ -8,8 +8,9 @@ import web.app.jpamodel.company.SpFindCompany;
 import web.app.jpamodel.company.TblCompany;
 import web.app.jpamodel.company.TblCompanyComments;
 import web.app.jpamodel.contact.TblContacts;
+import web.app.rest.BaseEntity;
 
-public class CompanyEntity {
+public class CompanyEntity extends BaseEntity{
 	
 	private TblCompany company;
 		

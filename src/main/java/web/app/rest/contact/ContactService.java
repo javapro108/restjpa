@@ -1,6 +1,7 @@
 package web.app.rest.contact;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,15 +15,20 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import web.app.common.AppConstants;
+import web.app.common.LockObject;
+import web.app.common.SystemServices;
 import web.app.common.User;
 import web.app.jpamodel.company.SpCompanyNewCheckParams;
 import web.app.jpamodel.company.SpCompanyNewCheckResults;
 import web.app.jpamodel.company.SpFindCompany;
+import web.app.jpamodel.company.TblCompanyComments;
+import web.app.jpamodel.company.sp.SpCompanyTableResults;
 import web.app.jpamodel.contact.SpContactNewCheckParams;
 import web.app.jpamodel.contact.SpContactNewCheckResults;
 import web.app.jpamodel.contact.SpFindContactResult;
@@ -34,6 +40,8 @@ import web.app.jpamodel.contact.TblContactRepsKey;
 import web.app.jpamodel.contact.TblContacts;
 import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.TblContactsDisciplineKey;
+import web.app.jpamodel.contact.sp.SpContactParams;
+import web.app.jpamodel.contact.sp.SpContactViewResults;
 import web.app.rest.ApplicationServiceBase;
 import web.app.rest.company.CompanyEntity;
 
@@ -44,7 +52,8 @@ public class ContactService extends ApplicationServiceBase {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	//@RolesAllowed({"1"})
-	public ContactEntity getContactEntity(@Context SecurityContext securityContext, @PathParam("id") long id) {
+	public ContactEntity getContactEntity(@Context SecurityContext securityContext, @PathParam("id") long id, @QueryParam("lock") boolean lock) {
+		
 		ContactEntity contactEntity = new ContactEntity();			
 		
 		TblContacts contact = null;		
@@ -52,6 +61,23 @@ public class ContactService extends ApplicationServiceBase {
 		List<TblContactsDiscipline> disciplines = new ArrayList<TblContactsDiscipline>();		
 		List<TblContactAffiliates> affiliates = new ArrayList<TblContactAffiliates>();		
 		List<TblContactReps> reps = new ArrayList<TblContactReps>();
+		
+		User user = (User) securityContext.getUserPrincipal();
+		
+		if (lock == true ){
+			SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+			LockObject lockObject = new LockObject();
+			
+			lockObject.setObjectId(Long.toString(id));
+			lockObject.setObjectType("CONTACT");
+			lockObject.setLockedBy(user.getUserName());
+			
+			if (!sysService.lockObject(lockObject)){
+				contactEntity.addMessage("Contact locked for edit");
+				return contactEntity;
+			};			
+			
+		}		
 		
 		//Get Entity Manager
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
@@ -97,6 +123,7 @@ public class ContactService extends ApplicationServiceBase {
 
 		return contactEntity;
 	}
+
 	
 	@Path("/create")
 	@POST
@@ -141,12 +168,27 @@ public class ContactService extends ApplicationServiceBase {
 		return contactEntity;
 	}	
 
+	
     @Path("/change")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ContactEntity putContactEntity(@Context SecurityContext securityContext, ContactEntity contactEntity) {
+	public ContactEntity putContactEntity(@Context SecurityContext securityContext, ContactEntity contactEntity, @QueryParam("unlock") boolean unLock) {
 
+		User user = (User) securityContext.getUserPrincipal();
+
+		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+		LockObject lockObject = new LockObject();
+		
+		lockObject.setObjectId(Long.toString(contactEntity.getContact().getConID()));
+		lockObject.setObjectType("CONTACT");
+		lockObject.setLockedBy(user.getUserName());
+		
+		if (!sysService.lockObject(lockObject)){
+			contactEntity.addMessage("Contact not locked for edit, please try again.");
+			return contactEntity;
+		}
+    	
 		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
@@ -175,8 +217,75 @@ public class ContactService extends ApplicationServiceBase {
 		
 		em.getTransaction().commit();
 		em.close();
+		
+		if (unLock == true ){
+			sysService.unLockObject(lockObject);			
+		}			
+		
 		return contactEntity;
-	}	
+	}
+    
+    
+    @Path("/addcomment")
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public TblContactComments addComment(@Context SecurityContext securityContext, TblContactComments contactComment) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User) securityContext.getUserPrincipal();
+		
+		contactComment.setCocDate(new Date());
+		contactComment.setCocUser(user.getUserName());
+		em.merge(contactComment);
+
+		em.getTransaction().commit();
+		em.close();
+		return contactComment;
+		
+	}
+    
+    
+
+    @Path("/details")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ContactDetailsEntity contactDetails(@Context SecurityContext securityContext, SpContactParams params) {
+    	
+    	ContactDetailsEntity contactDetails = new ContactDetailsEntity();
+    	
+    	SpContactViewResults contact = null;
+    	
+    	List<SpContactViewResults> contactList = null;
+    	
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User)securityContext.getUserPrincipal();
+		if (params.getEmpID() == null){
+			params.setEmpID(user.getUserName());
+		}
+		
+		if (params.getGetContactDetail()){			
+			Query qCompany = em.createNamedStoredProcedureQuery("spContactView");		
+			qCompany.setParameter("conID", params.getConID());
+			qCompany.setParameter("empID", params.getEmpID());		
+			contactList = (List<SpContactViewResults>)qCompany.getResultList();
+			if (contactList.iterator().hasNext()){
+				contact = contactList.iterator().next();				
+			}											
+		}
+    	
+    	if (contact != null ){
+    		contactDetails.setContact(contact);    		
+    	}
+    	
+    	return contactDetails;
+    }
+    
 		
 	@Path("/findcontactadvall")
 	@POST
@@ -203,6 +312,7 @@ public class ContactService extends ApplicationServiceBase {
 
 	}	
 
+	
 	@Path("/findcontactadv")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -221,7 +331,6 @@ public class ContactService extends ApplicationServiceBase {
 		query.setParameter("Inactive", contactEntity.getFindParams().getConInactive());
 		
 		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
-		
 		
 		em.close();
 		
@@ -251,7 +360,6 @@ public class ContactService extends ApplicationServiceBase {
 		return resultList;
 		
 	}
-	
 	
 	
 }

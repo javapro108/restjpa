@@ -1,6 +1,7 @@
 package web.app.rest.company;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -8,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,13 +16,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
-import com.sun.research.ws.wadl.Application;
-
 import web.app.common.AppConstants;
+import web.app.common.LockObject;
+import web.app.common.SystemServices;
 import web.app.common.User;
 import web.app.jpamodel.company.SpCompanyNewCheckParams;
 import web.app.jpamodel.company.SpCompanyNewCheckResults;
@@ -47,12 +48,32 @@ public class CompanyService extends ApplicationServiceBase{
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	//@RolesAllowed({"1"})
-	public CompanyEntity getCompanyEntity(@Context SecurityContext securityContext, @PathParam("id") long id) {
-        
+	public CompanyEntity getCompanyEntity(@Context SecurityContext securityContext, @PathParam("id") long id, @QueryParam("lock") boolean lock) {
+        		
+		
 		CompanyEntity companyEntity = new CompanyEntity();
 		List<TblCompanyComments> companyComments = new ArrayList<TblCompanyComments>();
 		TblCompany tblCompany = null;
 		List<TblContacts> companyContacts = new ArrayList<TblContacts>();
+		
+		User user = (User) securityContext.getUserPrincipal();
+						
+		if (lock == true ){
+
+			SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+			LockObject lockObject = new LockObject();
+			
+			lockObject.setObjectId(Long.toString(id));
+			lockObject.setObjectType("COMPANY");
+			lockObject.setLockedBy(user.getUserName());
+			
+			if (!sysService.lockObject(lockObject)){
+				companyEntity.addMessage("Company locked for edit");
+				return companyEntity;
+			};			
+			
+		}
+		
 		
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();		
@@ -90,6 +111,11 @@ public class CompanyService extends ApplicationServiceBase{
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 		
+		User user = (User) securityContext.getUserPrincipal();
+
+		companyEntity.getCompany().setComCreatedBy(user.getUserName());
+		companyEntity.getCompany().setComDate(new Date());
+
 		//Create company always active 
 		companyEntity.getCompany().setComInactive(false);
 		
@@ -108,30 +134,80 @@ public class CompanyService extends ApplicationServiceBase{
 		return companyEntity;
 	}
 	
+	
     @Path("/change")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public CompanyEntity putCompanyEntity(@Context SecurityContext securityContext, CompanyEntity companyEntity) {
+	public CompanyEntity putCompanyEntity(@Context SecurityContext securityContext, CompanyEntity companyEntity, @QueryParam("unlock") boolean unLock) {
 
+		User user = (User) securityContext.getUserPrincipal();
+
+		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
+		LockObject lockObject = new LockObject();
+		
+		lockObject.setObjectId(Long.toString(companyEntity.getCompany().getComID()));
+		lockObject.setObjectType("COMPANY");
+		lockObject.setLockedBy(user.getUserName());
+		
+		if (!sysService.lockObject(lockObject)){
+			companyEntity.addMessage("Company not locked for edit, please try again.");
+			return companyEntity;
+		};			
+				
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
+				
+		companyEntity.getCompany().setComRevisedBy(user.getUserName());
+		companyEntity.getCompany().setComRevisedDate(new Date());		
 
 		em.getTransaction().begin();		
 		em.merge(companyEntity.getCompany());
 		
 		for (TblCompanyComments companyComments : companyEntity.getComments()) {
+			
+			companyComments.setCmcDate(new Date());
+			companyComments.setCmcUser(user.getUserName());
 			em.merge(companyComments);
 			//em.flush();
 			//em.clear();
 		}
 
 		em.getTransaction().commit();
+		
 		em.close();
+		
+		if (unLock == true ){
+			sysService.unLockObject(lockObject);			
+		}		
+		
+		
 		return companyEntity;
 	}
-	
-	
+
+
+    @Path("/addcomment")
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public TblCompanyComments addComment(@Context SecurityContext securityContext, TblCompanyComments companyComment) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User) securityContext.getUserPrincipal();
+		
+		companyComment.setCmcDate(new Date());
+		companyComment.setCmcUser(user.getUserName());
+		em.merge(companyComment);
+
+		em.getTransaction().commit();
+		em.close();
+		return companyComment;
+		
+	}    
+
+
 	@Path("/findcompany")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -156,6 +232,8 @@ public class CompanyService extends ApplicationServiceBase{
 		return companyEntity;
 
 	}
+	
+	
 	
 	@Path("/newcheck")
 	@POST
@@ -261,7 +339,9 @@ public class CompanyService extends ApplicationServiceBase{
 		em.close();		
 		
 		// Create display entity
-		company = companyList.iterator().next();
+		if (companyList.iterator().hasNext()){
+			company = companyList.iterator().next();
+		}		
 		if (company != null ){
 			companyDetails.setCompany(company);
 

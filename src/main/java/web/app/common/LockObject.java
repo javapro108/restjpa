@@ -6,7 +6,7 @@ public class LockObject {
 	private String objectType;
 	private String objectId;
 	private String lockedBy; //User name
-	private Date lockedTime;
+	private Date lockedTime = new Date();
 	
 	public String getObjectType() {
 		return objectType;

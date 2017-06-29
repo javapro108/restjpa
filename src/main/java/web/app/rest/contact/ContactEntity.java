@@ -10,8 +10,9 @@ import web.app.jpamodel.contact.TblContactComments;
 import web.app.jpamodel.contact.TblContactReps;
 import web.app.jpamodel.contact.TblContacts;
 import web.app.jpamodel.contact.TblContactsDiscipline;
+import web.app.rest.BaseEntity;
 
-public class ContactEntity {
+public class ContactEntity extends BaseEntity{
 	
 	private TblContacts contact = new TblContacts();
 	
