@@ -12,7 +12,7 @@ import javax.persistence.StoredProcedureParameter;
 		name="spContactJobs", 
 		procedureName="spContactJobs", 
 		parameters = {
-		    @StoredProcedureParameter(name = "comID", mode=ParameterMode.IN, type = Long.class),
+		    @StoredProcedureParameter(name = "conID", mode=ParameterMode.IN, type = Long.class),
 		    @StoredProcedureParameter(name = "empID", mode=ParameterMode.IN, type = String.class)
 		},
 		resultClasses = {SpContactJobsResults.class}
