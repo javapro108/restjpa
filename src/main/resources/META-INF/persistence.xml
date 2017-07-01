@@ -13,6 +13,7 @@
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="database" />
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+      <property name="eclipselink.cache.shared.default" value="false"/>
       </properties>
   </persistence-unit>
   <persistence-unit name="EclipseLink_SQLServer"
@@ -47,6 +48,7 @@
            	<property name="javax.persistence.jdbc.user" 		value="sa"></property>
            	<property name="javax.persistence.jdbc.password" 	value="passw0rd"></property>
 			<property name="eclipselink.target-database"    	value="org.eclipse.persistence.platform.database.SQLServerPlatform" />
+			<property name="eclipselink.cache.shared.default" 	value="false"/>
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="eclipselink.logging.level" 				value="FINE" />
 			<!-- EclipseLink should create the database schema automatically 
