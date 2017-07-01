@@ -103,7 +103,4 @@ public class SpContactParams {
 		this.getDiscipline = getDiscipline;
 	}
 	
-
-	
-	
 }

@@ -40,193 +40,313 @@ import web.app.jpamodel.contact.TblContactRepsKey;
 import web.app.jpamodel.contact.TblContacts;
 import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.TblContactsDisciplineKey;
+import web.app.jpamodel.contact.sp.SpContactJobsResults;
 import web.app.jpamodel.contact.sp.SpContactParams;
+import web.app.jpamodel.contact.sp.SpContactProjectsResults;
 import web.app.jpamodel.contact.sp.SpContactViewResults;
 import web.app.rest.ApplicationServiceBase;
 import web.app.rest.company.CompanyEntity;
 
 @Path("/contacts")
 public class ContactService extends ApplicationServiceBase {
-	
+
 	@Path("/get({id})")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	//@RolesAllowed({"1"})
-	public ContactEntity getContactEntity(@Context SecurityContext securityContext, @PathParam("id") long id, @QueryParam("lock") boolean lock) {
-		
-		ContactEntity contactEntity = new ContactEntity();			
-		
-		TblContacts contact = null;		
-		List<TblContactComments> comments = new ArrayList<TblContactComments>();		
-		List<TblContactsDiscipline> disciplines = new ArrayList<TblContactsDiscipline>();		
-		List<TblContactAffiliates> affiliates = new ArrayList<TblContactAffiliates>();		
+	// @RolesAllowed({"1"})
+	public ContactEntity getContactEntity(@Context SecurityContext securityContext, @PathParam("id") long id,
+			@QueryParam("lock") boolean lock) {
+
+		ContactEntity contactEntity = new ContactEntity();
+
+		TblContacts contact = null;
+		List<TblContactComments> comments = new ArrayList<TblContactComments>();
+		List<TblContactsDiscipline> disciplines = new ArrayList<TblContactsDiscipline>();
+		List<TblContactAffiliates> affiliates = new ArrayList<TblContactAffiliates>();
 		List<TblContactReps> reps = new ArrayList<TblContactReps>();
-		
+
 		User user = (User) securityContext.getUserPrincipal();
-		
-		if (lock == true ){
+
+		if (lock == true) {
 			SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
 			LockObject lockObject = new LockObject();
-			
+
 			lockObject.setObjectId(Long.toString(id));
 			lockObject.setObjectType("CONTACT");
 			lockObject.setLockedBy(user.getUserName());
-			
-			if (!sysService.lockObject(lockObject)){
+
+			if (!sysService.lockObject(lockObject)) {
 				contactEntity.addMessage("Contact locked for edit");
 				return contactEntity;
-			};			
-			
-		}		
-		
-		//Get Entity Manager
+			}
+			;
+
+		}
+
+		// Get Entity Manager
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
-		EntityManager em = emf.createEntityManager();		
-				
-		contact = em.find(TblContacts.class, id);		
-		if (contact != null ){
-			//Set selected contact 
+		EntityManager em = emf.createEntityManager();
+
+		contact = em.find(TblContacts.class, id);
+		if (contact != null) {
+			// Set selected contact
 			contactEntity.setContact(contact);
-			
-			//Get Contact Comments 
-			TypedQuery<TblContactComments> queryComments = em.createQuery("SELECT comments FROM TblContactComments comments WHERE comments.cocContactID = :contactID", TblContactComments.class);
+
+			// Get Contact Comments
+			TypedQuery<TblContactComments> queryComments = em.createQuery(
+					"SELECT comments FROM TblContactComments comments WHERE comments.cocContactID = :contactID",
+					TblContactComments.class);
 			queryComments.setParameter("contactID", contact.getConID());
 			comments = queryComments.getResultList();
-			//Set selected comments to company entity
-			contactEntity.setComments(comments);	
-			
-			
-			//Get Contact Disciplines 
-			TypedQuery<TblContactsDiscipline> queryDesciplines = em.createQuery("SELECT disciplines FROM TblContactsDiscipline disciplines WHERE disciplines.codContactID = :contactID", TblContactsDiscipline.class);
+			// Set selected comments to company entity
+			contactEntity.setComments(comments);
+
+			// Get Contact Disciplines
+			TypedQuery<TblContactsDiscipline> queryDesciplines = em.createQuery(
+					"SELECT disciplines FROM TblContactsDiscipline disciplines WHERE disciplines.codContactID = :contactID",
+					TblContactsDiscipline.class);
 			queryDesciplines.setParameter("contactID", contact.getConID());
 			disciplines = queryDesciplines.getResultList();
-			//Set selected comments to company entity
+			// Set selected comments to company entity
 			contactEntity.setDisciplines(disciplines);
-			
 
-			//Get Contact Affiliates 
-			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery("SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.cafContactID = :contactID", TblContactAffiliates.class);
+			// Get Contact Affiliates
+			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery(
+					"SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.cafContactID = :contactID",
+					TblContactAffiliates.class);
 			queryAffiliates.setParameter("contactID", contact.getConID());
 			affiliates = queryAffiliates.getResultList();
-			//Set selected comments to company entity
+			// Set selected comments to company entity
 			contactEntity.setAffiliates(affiliates);
-			
 
-			//Get Contact Reps 
-			TypedQuery<TblContactReps> queryReps = em.createQuery("SELECT reps FROM TblContactReps reps WHERE reps.corContactID = :contactID", TblContactReps.class);
+			// Get Contact Reps
+			TypedQuery<TblContactReps> queryReps = em.createQuery(
+					"SELECT reps FROM TblContactReps reps WHERE reps.corContactID = :contactID", TblContactReps.class);
 			queryReps.setParameter("contactID", contact.getConID());
 			reps = queryReps.getResultList();
-			//Set selected comments to company entity
-			contactEntity.setReps(reps);						
-			
+			// Set selected comments to company entity
+			contactEntity.setReps(reps);
+
 		}
 
 		return contactEntity;
 	}
 
-	
 	@Path("/create")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ContactEntity postContactEntity(@Context SecurityContext securityContext, ContactEntity contactEntity) {
 
-		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
-		em.getTransaction().begin();		
+		em.getTransaction().begin();
+
+		contactEntity.getContact().setConInactive(false);
+
 		em.persist(contactEntity.getContact());
-		//flush so that newly created id is reflected on entity object 
+		// flush so that newly created id is reflected on entity object
 		em.flush();
-		
-		//Save Comments 
-		for (TblContactComments comments : contactEntity.getComments()) {
-			comments.setCocContactID(contactEntity.getContact().getConID());
-			em.persist(comments);
-		}
-		
-		//Save Disciplines
-		for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
-			discipline.setCodContactID(contactEntity.getContact().getConID());			
-			em.persist(discipline);
+
+		// Save Comments
+		if (contactEntity.getComments() != null) {
+			for (TblContactComments comments : contactEntity.getComments()) {
+				comments.setCocContactID(contactEntity.getContact().getConID());
+				em.persist(comments);
+			}
 		}
 
-		//Save Affiliates
-		for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
-			affiliate.setCafContactID(contactEntity.getContact().getConID());
-			em.persist(affiliate);
+		// Save Disciplines
+		if (contactEntity.getDisciplines() != null) {
+			for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
+				if (discipline.getMode().equals("I")) {
+					discipline.setCodContactID(contactEntity.getContact().getConID());
+					em.persist(discipline);
+				}
+			}
 		}
 
-		//Save Reps
-		for (TblContactReps rep : contactEntity.getReps()) {
-			rep.setCorContactID(contactEntity.getContact().getConID());
-			em.persist(rep);
-		}				
-		
+		// Save Affiliates
+		if (contactEntity.getAffiliates() != null) {
+			for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
+				if (affiliate.getMode().equals("I")) {
+					affiliate.setCafContactID(contactEntity.getContact().getConID());
+					em.persist(affiliate);
+				}
+			}
+		}
+
+		// Save Reps
+		if (contactEntity.getReps() != null) {
+			for (TblContactReps rep : contactEntity.getReps()) {
+				if (rep.getMode().equals("I")) {
+					rep.setCorContactID(contactEntity.getContact().getConID());
+					em.persist(rep);
+				}
+			}
+		}
+
 		em.getTransaction().commit();
 		em.close();
 		return contactEntity;
-	}	
+	}
 
-	
-    @Path("/change")
+	@Path("/change")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ContactEntity putContactEntity(@Context SecurityContext securityContext, ContactEntity contactEntity, @QueryParam("unlock") boolean unLock) {
+	public ContactEntity putContactEntity(@Context SecurityContext securityContext, ContactEntity contactEntity,
+			@QueryParam("unlock") boolean unLock) {
+
+		List<TblContactsDiscipline> disciplinesIns = new ArrayList<TblContactsDiscipline>();
+		List<TblContactsDiscipline> disciplinesUpd = new ArrayList<TblContactsDiscipline>();
+		List<TblContactsDiscipline> disciplinesDel = new ArrayList<TblContactsDiscipline>();
+
+		List<TblContactReps> repsIns = new ArrayList<TblContactReps>();
+		List<TblContactReps> repsUpd = new ArrayList<TblContactReps>();
+		List<TblContactReps> repsDel = new ArrayList<TblContactReps>();
+
+		List<TblContactAffiliates> affiliatesIns = new ArrayList<TblContactAffiliates>();
+		List<TblContactAffiliates> affiliatesUpd = new ArrayList<TblContactAffiliates>();
+		List<TblContactAffiliates> affiliatesDel = new ArrayList<TblContactAffiliates>();
 
 		User user = (User) securityContext.getUserPrincipal();
 
 		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
 		LockObject lockObject = new LockObject();
-		
+
 		lockObject.setObjectId(Long.toString(contactEntity.getContact().getConID()));
 		lockObject.setObjectType("CONTACT");
 		lockObject.setLockedBy(user.getUserName());
-		
-		if (!sysService.lockObject(lockObject)){
+
+		if (!sysService.lockObject(lockObject)) {
 			contactEntity.addMessage("Contact not locked for edit, please try again.");
 			return contactEntity;
 		}
-    	
-		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute(AppConstants.MSSQL_EMF);
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
-		em.getTransaction().begin();		
+		em.getTransaction().begin();
 		em.merge(contactEntity.getContact());
-		
-		//Save Comments 
+
+		// Save Comments
 		for (TblContactComments comments : contactEntity.getComments()) {
 			em.merge(comments);
 		}
-		
-		//Save Disciplines
-		for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
-			em.merge(discipline);
+
+		// Save Disciplines
+		if (contactEntity.getDisciplines() != null) {
+			for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
+				if (discipline.getMode().equals("I")) {
+					disciplinesIns.add(discipline);
+				}
+				if (discipline.getMode().equals("U")) {
+					disciplinesUpd.add(discipline);
+				}
+				if (discipline.getMode().equals("D")) {
+					disciplinesDel.add(discipline);
+				}
+			}
+
+			for (TblContactsDiscipline disciplineDel : disciplinesDel) {
+				
+				TblContactsDisciplineKey disciplineKey = new TblContactsDisciplineKey();
+				disciplineKey.setCodContactID(disciplineDel.getCodContactID());
+				disciplineKey.setCodDisciplineID(disciplineDel.getCodDisciplineID());
+				
+				disciplineDel = em.find(TblContactsDiscipline.class, disciplineKey);
+				em.remove(disciplineDel);
+			
+			}
+
+			for (TblContactsDiscipline disciplineIns : disciplinesIns) {
+				em.persist(disciplineIns);
+			}
+			for (TblContactsDiscipline disciplineUpd : disciplinesUpd) {
+				em.merge(disciplineUpd);
+			}
 		}
 
-		//Save Affiliates
-		for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
-			em.merge(affiliate);
+		// Save Affiliates
+		if (contactEntity.getAffiliates() != null) {
+			for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
+				if (affiliate.getMode().equals("I")) {
+					affiliatesIns.add(affiliate);
+				}
+				if (affiliate.getMode().equals("U")) {
+					affiliatesUpd.add(affiliate);
+				}
+				if (affiliate.getMode().equals("D")) {
+					affiliatesDel.add(affiliate);
+				}
+			}
+
+			for (TblContactAffiliates affiliateDel : affiliatesDel) {
+				
+				TblContactAffiliatesKey affiliateKey = new TblContactAffiliatesKey();
+				affiliateKey.setCafAffialiateID(affiliateDel.getCafAffialiateID());
+				affiliateKey.setCafContactID(affiliateDel.getCafContactID());				
+				
+				affiliateDel = em.find(TblContactAffiliates.class, affiliateKey);
+				em.remove(affiliateDel);
+				
+			}
+			
+			for (TblContactAffiliates affiliateUpd : affiliatesUpd) {
+				em.merge(affiliateUpd);
+			}
+			
+			for (TblContactAffiliates affiliateIns : affiliatesIns) {
+				em.persist(affiliateIns);
+			}
+			
 		}
 
-		//Save Reps
-		for (TblContactReps rep : contactEntity.getReps()) {
-			em.merge(rep);
-		}				
-		
+		// Save Reps
+		if (contactEntity.getReps() != null) {
+			for (TblContactReps rep : contactEntity.getReps()) {
+				if (rep.getMode().equals("I")) {
+					repsIns.add(rep);
+				}
+				if (rep.getMode().equals("U")) {
+					repsUpd.add(rep);
+				}
+				if (rep.getMode().equals("D")) {
+					repsDel.add(rep);
+				}
+			}
+			for (TblContactReps repDel : repsDel) {
+				
+				TblContactRepsKey repKey = new TblContactRepsKey();
+				repKey.setCorContactID(repDel.getCorContactID());
+				repKey.setCorAffialiateID(repDel.getCorAffialiateID());
+				repKey.setCorRepID(repDel.getCorRepID());
+				
+				repDel = em.find(TblContactReps.class,repKey);
+				em.remove(repDel);				
+				
+			}
+			for (TblContactReps repIns : repsIns) {
+				em.merge(repIns);
+			}
+			for (TblContactReps repUpd : repsUpd) {
+				em.merge(repUpd);
+			}
+		}
+
 		em.getTransaction().commit();
 		em.close();
-		
-		if (unLock == true ){
-			sysService.unLockObject(lockObject);			
-		}			
-		
+
+		if (unLock == true) {
+			sysService.unLockObject(lockObject);
+		}
+
 		return contactEntity;
 	}
-    
-    
-    @Path("/addcomment")
+
+	@Path("/addcomment")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -234,9 +354,9 @@ public class ContactService extends ApplicationServiceBase {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-		
+
 		User user = (User) securityContext.getUserPrincipal();
-		
+
 		contactComment.setCocDate(new Date());
 		contactComment.setCocUser(user.getUserName());
 		em.merge(contactComment);
@@ -244,75 +364,95 @@ public class ContactService extends ApplicationServiceBase {
 		em.getTransaction().commit();
 		em.close();
 		return contactComment;
-		
-	}
-    
-    
 
-    @Path("/details")
+	}
+
+	@Path("/details")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ContactDetailsEntity contactDetails(@Context SecurityContext securityContext, SpContactParams params) {
-    	
-    	ContactDetailsEntity contactDetails = new ContactDetailsEntity();
-    	
-    	SpContactViewResults contact = null;
-    	
-    	List<SpContactViewResults> contactList = null;
-    	
+
+		ContactDetailsEntity contactDetails = new ContactDetailsEntity();
+
+		SpContactViewResults contact = null;
+
+		List<SpContactViewResults> contactList = null;
+		List<SpContactJobsResults> jobs = null;
+		List<SpContactProjectsResults> projects = null;
+
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-		
-		User user = (User)securityContext.getUserPrincipal();
-		if (params.getEmpID() == null){
+
+		User user = (User) securityContext.getUserPrincipal();
+		if (params.getEmpID() == null) {
 			params.setEmpID(user.getUserName());
 		}
-		
-		if (params.getGetContactDetail()){			
-			Query qCompany = em.createNamedStoredProcedureQuery("spContactView");		
-			qCompany.setParameter("conID", params.getConID());
-			qCompany.setParameter("empID", params.getEmpID());		
-			contactList = (List<SpContactViewResults>)qCompany.getResultList();
-			if (contactList.iterator().hasNext()){
-				contact = contactList.iterator().next();				
-			}											
+
+		if (params.getGetContactDetail()) {
+			Query qContact = em.createNamedStoredProcedureQuery("spContactView");
+			qContact.setParameter("conID", params.getConID());
+			qContact.setParameter("empID", params.getEmpID());
+			contactList = (List<SpContactViewResults>) qContact.getResultList();
+			if (contactList.iterator().hasNext()) {
+				contact = contactList.iterator().next();
+			}
 		}
-    	
-    	if (contact != null ){
-    		contactDetails.setContact(contact);    		
-    	}
-    	
-    	return contactDetails;
-    }
-    
-		
+
+		if (params.getGetJobs()) {
+			Query qJobs = em.createNamedStoredProcedureQuery("spContactJobs");
+			qJobs.setParameter("conID", params.getConID());
+			qJobs.setParameter("empID", params.getEmpID());
+			jobs = (List<SpContactJobsResults>) qJobs.getResultList();
+		}
+
+		if (params.getGetProjects()) {
+			Query qProjects = em.createNamedStoredProcedureQuery("spContactProjects");
+			qProjects.setParameter("conID", params.getConID());
+			qProjects.setParameter("empID", params.getEmpID());
+			projects = (List<SpContactProjectsResults>) qProjects.getResultList();
+		}
+
+		if (contact != null) {
+			contactDetails.setContact(contact);
+		}
+		if (jobs != null) {
+			contactDetails.setJobs(jobs);
+		}
+		if (projects != null) {
+			contactDetails.setProjects(projects);
+		}
+
+		return contactDetails;
+	}
+
 	@Path("/findcontactadvall")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ContactEntity findContactsAdvancedAll(@Context SecurityContext securityContext, ContactEntity contactEntity) {
+	public ContactEntity findContactsAdvancedAll(@Context SecurityContext securityContext,
+			ContactEntity contactEntity) {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-		
-		User user = (User)securityContext.getUserPrincipal();
-				
+
+		User user = (User) securityContext.getUserPrincipal();
+
 		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvancedAll");
 		query.setParameter("conName", contactEntity.getFindParams().getConName());
 		query.setParameter("empID", user.getUserName());
-		//query.setParameter("Inactive", companyEntity.getCompany().getComInactive());
-		
-		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
-	
+		// query.setParameter("Inactive",
+		// companyEntity.getCompany().getComInactive());
+
+		List<SpFindContactResult> resultList = (List<SpFindContactResult>) query.getResultList();
+
 		em.close();
-		
+
 		contactEntity.setFindResults(resultList);
 		return contactEntity;
 
-	}	
+	}
 
-	
 	@Path("/findcontactadv")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -321,45 +461,44 @@ public class ContactService extends ApplicationServiceBase {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-		
-		User user = (User)securityContext.getUserPrincipal();
-				
+
+		User user = (User) securityContext.getUserPrincipal();
+
 		Query query = em.createNamedStoredProcedureQuery("spFindContactsAdvanced");
-				
+
 		query.setParameter("conName", contactEntity.getFindParams().getConName());
 		query.setParameter("empID", user.getUserName());
 		query.setParameter("Inactive", contactEntity.getFindParams().getConInactive());
-		
-		List<SpFindContactResult> resultList = (List<SpFindContactResult>)query.getResultList();
-		
+
+		List<SpFindContactResult> resultList = (List<SpFindContactResult>) query.getResultList();
+
 		em.close();
-		
+
 		contactEntity.setFindResults(resultList);
 		return contactEntity;
 
-	}	
-	
-	
+	}
+
 	@Path("/newcheck")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<SpContactNewCheckResults> spContactNewCheck(@Context SecurityContext securityContext, SpContactNewCheckParams params) {
+	public List<SpContactNewCheckResults> spContactNewCheck(@Context SecurityContext securityContext,
+			SpContactNewCheckParams params) {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
-			
+
 		Query query = em.createNamedStoredProcedureQuery("spContactNewCheck");
-		query.setParameter("conFName", params.getConFName().substring(0,2));
+		query.setParameter("conFName", params.getConFName().substring(0, 2));
 		query.setParameter("conLName", params.getConLName());
-		
-		List<SpContactNewCheckResults> resultList = (List<SpContactNewCheckResults>)query.getResultList();
-		
-		em.close();		
+
+		List<SpContactNewCheckResults> resultList = (List<SpContactNewCheckResults>) query.getResultList();
+
+		em.close();
 
 		return resultList;
-		
+
 	}
-	
-	
+
 }

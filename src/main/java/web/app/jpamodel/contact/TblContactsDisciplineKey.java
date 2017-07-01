@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Id;
 
 
 @Embeddable
@@ -15,10 +16,9 @@ public class TblContactsDisciplineKey implements Serializable{
 	 */
 	private static final long serialVersionUID = -447679448144483289L;
 
-	
 	@Column(name="codContactID",length=18)
 	private long codContactID;
-
+		
 	@Column(name="codDisciplineID",length=10)
 	private String codDisciplineID;
 
