@@ -165,12 +165,11 @@ public class CompanyService extends ApplicationServiceBase{
 		em.merge(companyEntity.getCompany());
 		
 		for (TblCompanyComments companyComments : companyEntity.getComments()) {
-			
-			companyComments.setCmcDate(new Date());
-			companyComments.setCmcUser(user.getUserName());
-			em.merge(companyComments);
-			//em.flush();
-			//em.clear();
+			if ( companyComments != null ) { 
+				companyComments.setCmcDate(new Date());
+				companyComments.setCmcUser(user.getUserName());
+				em.persist(companyComments);
+			}
 		}
 
 		em.getTransaction().commit();
