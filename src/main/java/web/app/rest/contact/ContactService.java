@@ -156,6 +156,8 @@ public class ContactService extends ApplicationServiceBase {
 		// Save Comments
 		if (contactEntity.getComments() != null) {
 			for (TblContactComments comments : contactEntity.getComments()) {
+				comments.setCocDate(new Date());
+				comments.setCocUser(user.getUserName());
 				comments.setCocContactID(contactEntity.getContact().getConID());
 				em.persist(comments);
 			}
@@ -240,7 +242,10 @@ public class ContactService extends ApplicationServiceBase {
 		em.merge(contactEntity.getContact());
 
 		// Save Comments
-		for (TblContactComments comments : contactEntity.getComments()) {
+		for (TblContactComments comments : contactEntity.getComments()) {			
+			comments.setCocDate(new Date());
+			comments.setCocUser(user.getUserName());
+			comments.setCocContactID(contactEntity.getContact().getConID());
 			em.merge(comments);
 		}
 

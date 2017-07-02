@@ -124,7 +124,10 @@ public class CompanyService extends ApplicationServiceBase{
 		//flush so that newly created id is reflected on entity object 
 		em.flush();
 		for (TblCompanyComments companyComments : companyEntity.getComments()) {
+			
 			companyComments.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
+			companyComments.setCmcDate(new Date());
+			companyComments.setCmcUser(user.getUserName());
 			em.persist(companyComments);
 			//em.flush();
 			//em.clear();
@@ -166,6 +169,7 @@ public class CompanyService extends ApplicationServiceBase{
 		
 		for (TblCompanyComments companyComments : companyEntity.getComments()) {
 			if ( companyComments != null ) { 
+				companyComments.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
 				companyComments.setCmcDate(new Date());
 				companyComments.setCmcUser(user.getUserName());
 				em.persist(companyComments);
