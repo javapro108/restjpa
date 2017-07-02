@@ -80,7 +80,6 @@ public class ContactService extends ApplicationServiceBase {
 				contactEntity.addMessage("Contact locked for edit");
 				return contactEntity;
 			}
-			;
 
 		}
 
@@ -240,14 +239,16 @@ public class ContactService extends ApplicationServiceBase {
 		// Save Disciplines
 		if (contactEntity.getDisciplines() != null) {
 			for (TblContactsDiscipline discipline : contactEntity.getDisciplines()) {
-				if (discipline.getMode().equals("I")) {
-					disciplinesIns.add(discipline);
-				}
-				if (discipline.getMode().equals("U")) {
-					disciplinesUpd.add(discipline);
-				}
-				if (discipline.getMode().equals("D")) {
-					disciplinesDel.add(discipline);
+				if (discipline != null) {
+					if (discipline.getMode().equals("I")) {
+						disciplinesIns.add(discipline);
+					}
+					if (discipline.getMode().equals("U")) {
+						disciplinesUpd.add(discipline);
+					}
+					if (discipline.getMode().equals("D")) {
+						disciplinesDel.add(discipline);
+					}
 				}
 			}
 
@@ -273,14 +274,16 @@ public class ContactService extends ApplicationServiceBase {
 		// Save Affiliates
 		if (contactEntity.getAffiliates() != null) {
 			for (TblContactAffiliates affiliate : contactEntity.getAffiliates()) {
-				if (affiliate.getMode().equals("I")) {
-					affiliatesIns.add(affiliate);
-				}
-				if (affiliate.getMode().equals("U")) {
-					affiliatesUpd.add(affiliate);
-				}
-				if (affiliate.getMode().equals("D")) {
-					affiliatesDel.add(affiliate);
+				if ( affiliate != null ) {
+					if (affiliate.getMode().equals("I")) {
+						affiliatesIns.add(affiliate);
+					}
+					if (affiliate.getMode().equals("U")) {
+						affiliatesUpd.add(affiliate);
+					}
+					if (affiliate.getMode().equals("D")) {
+						affiliatesDel.add(affiliate);
+					}
 				}
 			}
 
@@ -308,14 +311,16 @@ public class ContactService extends ApplicationServiceBase {
 		// Save Reps
 		if (contactEntity.getReps() != null) {
 			for (TblContactReps rep : contactEntity.getReps()) {
-				if (rep.getMode().equals("I")) {
-					repsIns.add(rep);
-				}
-				if (rep.getMode().equals("U")) {
-					repsUpd.add(rep);
-				}
-				if (rep.getMode().equals("D")) {
-					repsDel.add(rep);
+				if ( rep != null ) {
+					if (rep.getMode().equals("I")) {
+						repsIns.add(rep);
+					}
+					if (rep.getMode().equals("U")) {
+						repsUpd.add(rep);
+					}
+					if (rep.getMode().equals("D")) {
+						repsDel.add(rep);
+					}
 				}
 			}
 			for (TblContactReps repDel : repsDel) {
@@ -348,7 +353,7 @@ public class ContactService extends ApplicationServiceBase {
 	}
 
 	@Path("/addcomment")
-	@PUT
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public TblContactComments addComment(@Context SecurityContext securityContext, TblContactComments contactComment) {
@@ -360,10 +365,12 @@ public class ContactService extends ApplicationServiceBase {
 
 		contactComment.setCocDate(new Date());
 		contactComment.setCocUser(user.getUserName());
-		em.merge(contactComment);
 
+		em.getTransaction().begin();
+		em.persist(contactComment);
 		em.getTransaction().commit();
 		em.close();
+		
 		return contactComment;
 
 	}
@@ -382,7 +389,10 @@ public class ContactService extends ApplicationServiceBase {
 		List<SpContactCommentsResults> comments = null;
 		List<SpContactJobsResults> jobs = null;
 		List<SpContactProjectsResults> projects = null;
-
+		List<TblContactsDiscipline> disciplines = null;
+		List<TblContactAffiliates> affiliates = null;
+		List<TblContactReps> reps = null;
+		
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
@@ -399,6 +409,30 @@ public class ContactService extends ApplicationServiceBase {
 			if (contactList.iterator().hasNext()) {
 				contact = contactList.iterator().next();
 			}
+			
+			// Get Contact Disciplines
+			TypedQuery<TblContactsDiscipline> queryDesciplines = em.createQuery(
+					"SELECT disciplines FROM TblContactsDiscipline disciplines WHERE disciplines.codContactID = :contactID",
+					TblContactsDiscipline.class);
+			queryDesciplines.setParameter("contactID", params.getConID());
+			disciplines = queryDesciplines.getResultList();
+			// Set selected comments to company entity
+
+			// Get Contact Affiliates
+			TypedQuery<TblContactAffiliates> queryAffiliates = em.createQuery(
+					"SELECT affiliates FROM TblContactAffiliates affiliates WHERE affiliates.cafContactID = :contactID",
+					TblContactAffiliates.class);
+			queryAffiliates.setParameter("contactID", params.getConID());
+			affiliates = queryAffiliates.getResultList();
+			// Set selected comments to company entity
+
+			// Get Contact Reps
+			TypedQuery<TblContactReps> queryReps = em.createQuery(
+					"SELECT reps FROM TblContactReps reps WHERE reps.corContactID = :contactID", TblContactReps.class);
+			queryReps.setParameter("contactID", params.getConID());
+			reps = queryReps.getResultList();
+			// Set selected comments to company entity			
+			
 		}
 		
 
@@ -422,9 +456,19 @@ public class ContactService extends ApplicationServiceBase {
 			qProjects.setParameter("empID", params.getEmpID());
 			projects = (List<SpContactProjectsResults>) qProjects.getResultList();
 		}
+		
 
 		if (contact != null) {
 			contactDetails.setContact(contact);
+			if (disciplines != null) {
+				contactDetails.setDisciplines(disciplines);
+			}
+			if (affiliates != null){
+				contactDetails.setAffiliates(affiliates);
+			}
+			if (reps != null) {
+				contactDetails.setReps(reps);
+			}
 		}
 		if (comments != null){
 			contactDetails.setComments(comments);

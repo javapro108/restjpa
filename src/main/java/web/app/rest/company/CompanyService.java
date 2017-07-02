@@ -187,7 +187,7 @@ public class CompanyService extends ApplicationServiceBase{
 
 
     @Path("/addcomment")
-	@PUT
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public TblCompanyComments addComment(@Context SecurityContext securityContext, TblCompanyComments companyComment) {
@@ -199,10 +199,12 @@ public class CompanyService extends ApplicationServiceBase{
 		
 		companyComment.setCmcDate(new Date());
 		companyComment.setCmcUser(user.getUserName());
-		em.merge(companyComment);
-
-		em.getTransaction().commit();
+		
+		em.getTransaction().begin();		
+		em.persist(companyComment);
+		em.getTransaction().commit();		
 		em.close();
+		
 		return companyComment;
 		
 	}    
