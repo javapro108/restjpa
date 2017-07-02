@@ -28,6 +28,7 @@ import web.app.jpamodel.common.TblPrefix;
 import web.app.jpamodel.common.TblStates;
 import web.app.jpamodel.common.TblStatusCodeAff;
 import web.app.jpamodel.common.sp.SpRepDropDown;
+import web.app.jpamodel.employee.TblEmployees;
 
 
 @Path("/app")
@@ -95,10 +96,33 @@ public class AppService extends ApplicationServiceBase {
 	}
 	
 	
+	@Path("/reps")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<TblEmployees> getRepsDropdown(@Context SecurityContext securityContext) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+
+		TypedQuery<TblEmployees> query = em.createQuery(
+				"Select emp from TblEmployees emp", 
+				TblEmployees.class);		
+		List<TblEmployees> resultList = (List<TblEmployees>)query.getResultList();
+		
+		em.close();
+		
+		for(TblEmployees rep: resultList ){
+			rep.setEmpPassword("");			
+		}
+		
+		return resultList;
+		
+	}
+	
 	@Path("/repdropdown")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)	
-	public List<SpRepDropDown> spRepDropDown(@Context SecurityContext securityContext) {
+	public List<SpRepDropDown> getReps(@Context SecurityContext securityContext) {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
@@ -110,7 +134,8 @@ public class AppService extends ApplicationServiceBase {
 		
 		return resultList;
 		
-	}
+	}	
+	
 	
 	@Path("/prefixes")
 	@GET
@@ -186,6 +211,24 @@ public class AppService extends ApplicationServiceBase {
 		return resultList;
 		
 	}
+	
+	
+	@Path("/affiliates")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<TblAffiliates> spAffiliate(@Context SecurityContext securityContext) {
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+
+		Query query = em.createNamedStoredProcedureQuery("spAffiliate");	
+		List<TblAffiliates> resultList = (List<TblAffiliates>)query.getResultList();
+		
+		em.close();
+		
+		return resultList;
+		
+	}	
 	
 	
 	@Path("/affstatus")

@@ -3,19 +3,28 @@ package web.app.jpamodel.common;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
-@NamedStoredProcedureQuery(
-		name="spAffiliateDropdown", 
-		procedureName="spAffiliateDropdown", 
-		parameters = {
-		    @StoredProcedureParameter(name = "empID", mode=ParameterMode.IN, type = String.class)
-		},
-		resultClasses = {TblAffiliates.class}
-	)
+
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(
+			name="spAffiliateDropdown", 
+			procedureName="spAffiliateDropdown", 
+			parameters = {
+			    @StoredProcedureParameter(name = "empID", mode=ParameterMode.IN, type = String.class)
+			},
+			resultClasses = {TblAffiliates.class}
+		),
+	@NamedStoredProcedureQuery(
+			name="spAffiliate", 
+			procedureName="spAffiliate", 
+			resultClasses = {TblAffiliates.class}
+		)	
+})
 @Entity
 @Table(name = "tblAffiliates", schema = "dbo")
 public class TblAffiliates {

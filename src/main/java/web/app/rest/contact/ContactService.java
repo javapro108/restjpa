@@ -40,6 +40,7 @@ import web.app.jpamodel.contact.TblContactRepsKey;
 import web.app.jpamodel.contact.TblContacts;
 import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.TblContactsDisciplineKey;
+import web.app.jpamodel.contact.sp.SpContactCommentsResults;
 import web.app.jpamodel.contact.sp.SpContactJobsResults;
 import web.app.jpamodel.contact.sp.SpContactParams;
 import web.app.jpamodel.contact.sp.SpContactProjectsResults;
@@ -378,6 +379,7 @@ public class ContactService extends ApplicationServiceBase {
 		SpContactViewResults contact = null;
 
 		List<SpContactViewResults> contactList = null;
+		List<SpContactCommentsResults> comments = null;
 		List<SpContactJobsResults> jobs = null;
 		List<SpContactProjectsResults> projects = null;
 
@@ -398,6 +400,14 @@ public class ContactService extends ApplicationServiceBase {
 				contact = contactList.iterator().next();
 			}
 		}
+		
+
+		if (params.getGetComments()) {
+			Query qComments = em.createNamedStoredProcedureQuery("spContactComments");
+			qComments.setParameter("conID", params.getConID());
+			comments = (List<SpContactCommentsResults>) qComments.getResultList();
+		}		
+		
 
 		if (params.getGetJobs()) {
 			Query qJobs = em.createNamedStoredProcedureQuery("spContactJobs");
@@ -415,6 +425,9 @@ public class ContactService extends ApplicationServiceBase {
 
 		if (contact != null) {
 			contactDetails.setContact(contact);
+		}
+		if (comments != null){
+			contactDetails.setComments(comments);
 		}
 		if (jobs != null) {
 			contactDetails.setJobs(jobs);
