@@ -140,9 +140,13 @@ public class ContactService extends ApplicationServiceBase {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
+		
+		User user = (User) securityContext.getUserPrincipal();
 
 		em.getTransaction().begin();
-
+		
+		contactEntity.getContact().setConCreatedBy(user.getUserName());
+		contactEntity.getContact().setConDate(new Date());
 		contactEntity.getContact().setConInactive(false);
 
 		em.persist(contactEntity.getContact());
@@ -213,12 +217,12 @@ public class ContactService extends ApplicationServiceBase {
 
 		User user = (User) securityContext.getUserPrincipal();
 
-		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
 		LockObject lockObject = new LockObject();
-
 		lockObject.setObjectId(Long.toString(contactEntity.getContact().getConID()));
 		lockObject.setObjectType("CONTACT");
 		lockObject.setLockedBy(user.getUserName());
+
+		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
 
 		if (!sysService.lockObject(lockObject)) {
 			contactEntity.addMessage("Contact not locked for edit, please try again.");
@@ -228,6 +232,10 @@ public class ContactService extends ApplicationServiceBase {
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
+		
+		contactEntity.getContact().setConRevisedBy(user.getUserName());
+		contactEntity.getContact().setConRevisedDate(new Date());		
+		
 		em.getTransaction().begin();
 		em.merge(contactEntity.getContact());
 

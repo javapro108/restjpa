@@ -3,18 +3,30 @@ package web.app.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import web.app.common.AppMessage;
+
 public class BaseEntity {
-	private List<String> messages = new ArrayList<String>();
+	private List<AppMessage> messages = new ArrayList<AppMessage>();
 
 	public void addMessage(String message){
-		messages.add(message);
+		AppMessage appMessage = new AppMessage();
+		appMessage.setType("Error");
+		appMessage.setMessage(message);
+		messages.add(appMessage);
 	}
+
+	public void addMessage(String type, String message){
+		AppMessage appMessage = new AppMessage();
+		appMessage.setType(type);
+		appMessage.setMessage(message);
+		messages.add(appMessage);
+	}	
 	
-	public List<String> getMessages() {
+	public List<AppMessage> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<String> messages) {
+	public void setMessages(List<AppMessage> messages) {
 		this.messages = messages;
 	}
 	
