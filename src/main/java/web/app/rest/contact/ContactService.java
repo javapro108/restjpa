@@ -155,11 +155,13 @@ public class ContactService extends ApplicationServiceBase {
 
 		// Save Comments
 		if (contactEntity.getComments() != null) {
-			for (TblContactComments comments : contactEntity.getComments()) {
-				comments.setCocDate(new Date());
-				comments.setCocUser(user.getUserName());
-				comments.setCocContactID(contactEntity.getContact().getConID());
-				em.persist(comments);
+			for (TblContactComments comment : contactEntity.getComments()) {
+				if (comment != null && !comment.getCmdComment().isEmpty()) {
+					comment.setCocDate(new Date());
+					comment.setCocUser(user.getUserName());
+					comment.setCocContactID(contactEntity.getContact().getConID());
+					em.persist(comment);
+				}
 			}
 		}
 
@@ -242,11 +244,13 @@ public class ContactService extends ApplicationServiceBase {
 		em.merge(contactEntity.getContact());
 
 		// Save Comments
-		for (TblContactComments comments : contactEntity.getComments()) {			
-			comments.setCocDate(new Date());
-			comments.setCocUser(user.getUserName());
-			comments.setCocContactID(contactEntity.getContact().getConID());
-			em.merge(comments);
+		for (TblContactComments comment : contactEntity.getComments()) {	
+			if (comment != null && !comment.getCmdComment().isEmpty()) {
+				comment.setCocDate(new Date());
+				comment.setCocUser(user.getUserName());
+				comment.setCocContactID(contactEntity.getContact().getConID());
+				em.merge(comment);
+			}
 		}
 
 		// Save Disciplines
@@ -369,22 +373,23 @@ public class ContactService extends ApplicationServiceBase {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public TblContactComments addComment(@Context SecurityContext securityContext, TblContactComments contactComment) {
+	public TblContactComments addComment(@Context SecurityContext securityContext, TblContactComments comment) {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 
 		User user = (User) securityContext.getUserPrincipal();
-
-		contactComment.setCocDate(new Date());
-		contactComment.setCocUser(user.getUserName());
+		if (comment != null && !comment.getCmdComment().isEmpty()) {
+		comment.setCocDate(new Date());
+		comment.setCocUser(user.getUserName());
+		}
 
 		em.getTransaction().begin();
-		em.persist(contactComment);
+		em.persist(comment);
 		em.getTransaction().commit();
 		em.close();
 		
-		return contactComment;
+		return comment;
 
 	}
 

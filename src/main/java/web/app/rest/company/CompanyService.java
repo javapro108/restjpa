@@ -123,14 +123,13 @@ public class CompanyService extends ApplicationServiceBase{
 		em.persist(companyEntity.getCompany());
 		//flush so that newly created id is reflected on entity object 
 		em.flush();
-		for (TblCompanyComments companyComments : companyEntity.getComments()) {
-			
-			companyComments.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
-			companyComments.setCmcDate(new Date());
-			companyComments.setCmcUser(user.getUserName());
-			em.persist(companyComments);
-			//em.flush();
-			//em.clear();
+		for (TblCompanyComments companyComment : companyEntity.getComments()) {
+			if ( companyComment != null && !companyComment.getCmcComment().isEmpty()) {
+				companyComment.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
+				companyComment.setCmcDate(new Date());
+				companyComment.setCmcUser(user.getUserName());
+				em.persist(companyComment);
+			}
 		}
 		em.getTransaction().commit();
 		em.close();
@@ -167,12 +166,12 @@ public class CompanyService extends ApplicationServiceBase{
 		em.getTransaction().begin();		
 		em.merge(companyEntity.getCompany());
 		
-		for (TblCompanyComments companyComments : companyEntity.getComments()) {
-			if ( companyComments != null ) { 
-				companyComments.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
-				companyComments.setCmcDate(new Date());
-				companyComments.setCmcUser(user.getUserName());
-				em.persist(companyComments);
+		for (TblCompanyComments companyComment : companyEntity.getComments()) {
+			if ( companyComment != null && !companyComment.getCmcComment().isEmpty()) { 
+				companyComment.setCmcCompanyID(String.valueOf(companyEntity.getCompany().getComID()));
+				companyComment.setCmcDate(new Date());
+				companyComment.setCmcUser(user.getUserName());
+				em.persist(companyComment);
 			}
 		}
 
@@ -199,9 +198,10 @@ public class CompanyService extends ApplicationServiceBase{
 		EntityManager em = emf.createEntityManager();
 		
 		User user = (User) securityContext.getUserPrincipal();
-		
+		if ( companyComment != null && !companyComment.getCmcComment().isEmpty()) {
 		companyComment.setCmcDate(new Date());
 		companyComment.setCmcUser(user.getUserName());
+		}
 		
 		em.getTransaction().begin();		
 		em.persist(companyComment);
