@@ -11,15 +11,15 @@ public class BaseEntity {
 	public void addMessage(String message){
 		AppMessage appMessage = new AppMessage();
 		appMessage.setType("Error");
-		appMessage.setMessage(message);
-		messages.add(appMessage);
+		appMessage.setMessage(message);		
+		messages.add(0, appMessage);
 	}
 
-	public void addMessage(String type, String message){
+	public void addMessage(String message, String type){
 		AppMessage appMessage = new AppMessage();
 		appMessage.setType(type);
 		appMessage.setMessage(message);
-		messages.add(appMessage);
+		messages.add(0, appMessage);
 	}	
 	
 	public List<AppMessage> getMessages() {

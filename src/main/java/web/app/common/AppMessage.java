@@ -7,7 +7,7 @@ public class AppMessage {
 	private String message;
 	private String objType;
 	private String objID;
-	private Date time;
+	private Date time = new Date();
 	
 	public String getType() {
 		return type;
