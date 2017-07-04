@@ -8,6 +8,7 @@ import web.app.jpamodel.contact.TblContactReps;
 import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.sp.SpContactCommentsResults;
 import web.app.jpamodel.contact.sp.SpContactJobsResults;
+import web.app.jpamodel.contact.sp.SpContactMarketingResults;
 import web.app.jpamodel.contact.sp.SpContactProjectsResults;
 import web.app.jpamodel.contact.sp.SpContactViewResults;
 
@@ -26,6 +27,9 @@ public class ContactDetailsEntity {
 	private List<TblContactAffiliates> affiliates = new ArrayList<TblContactAffiliates>();
 
 	private List<TblContactReps> reps = new ArrayList<TblContactReps>();
+	
+	private List<SpContactMarketingResults> marketings = new ArrayList<SpContactMarketingResults>();
+	
 
 	public SpContactViewResults getContact() {
 		return contact;
@@ -68,6 +72,12 @@ public class ContactDetailsEntity {
 	}
 	public void setReps(List<TblContactReps> reps) {
 		this.reps = reps;
+	}
+	public List<SpContactMarketingResults> getMarketings() {
+		return marketings;
+	}
+	public void setMarketings(List<SpContactMarketingResults> marketing) {
+		this.marketings = marketing;
 	}
 
 	

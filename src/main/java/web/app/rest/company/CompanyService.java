@@ -47,7 +47,7 @@ public class CompanyService extends ApplicationServiceBase{
 	@Path("/get({id})")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	//@RolesAllowed({"1"})
+	//@RolesAllowed({"1", "2"})
 	public CompanyEntity getCompanyEntity(@Context SecurityContext securityContext, @PathParam("id") long id, @QueryParam("lock") boolean lock) {
         		
 		
@@ -106,6 +106,7 @@ public class CompanyService extends ApplicationServiceBase{
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({"1", "2"})
 	public CompanyEntity postCompanyEntity(@Context SecurityContext securityContext, CompanyEntity companyEntity) {
 
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
@@ -141,6 +142,7 @@ public class CompanyService extends ApplicationServiceBase{
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"1", "2"})
 	public CompanyEntity putCompanyEntity(@Context SecurityContext securityContext, CompanyEntity companyEntity, @QueryParam("unlock") boolean unLock) {
 
 		User user = (User) securityContext.getUserPrincipal();
@@ -288,7 +290,7 @@ public class CompanyService extends ApplicationServiceBase{
 		}
 			
 		// Get Company
-		if ( params.getGetCompanyDetail() == true ) {		
+		if ( params.getGetCompanyDetail() ) {		
 			Query qCompany = em.createNamedStoredProcedureQuery("sp_CompanyTable");		
 			qCompany.setParameter("comID", params.getComID());
 			qCompany.setParameter("empID", params.getEmpID());		
@@ -296,14 +298,14 @@ public class CompanyService extends ApplicationServiceBase{
 		}
 		
 		// Get Comments
-		if ( params.getGetComments() == true ) {
+		if ( params.getGetComments() ) {
 			Query qComments = em.createNamedStoredProcedureQuery("spCompanyComments");
 			qComments.setParameter("comID", params.getComID());
 			comments = (List<SpCompanyCommentsResults>)qComments.getResultList();
 		}
 		
 		// Get Contacts
-		if ( params.getGetContacts() == true ) { 
+		if ( params.getGetContacts() ) { 
 			Query qContacts = em.createNamedStoredProcedureQuery("spCompanyContacts");
 			qContacts.setParameter("comID", params.getComID());
 			qContacts.setParameter("empID", params.getEmpID());
@@ -311,7 +313,7 @@ public class CompanyService extends ApplicationServiceBase{
 		}
 		
 		// Get Contact Activities
-		if ( params.getGetAvtivities() == true ) {					
+		if ( params.getGetAvtivities() ) {					
 			Query qContactActivities = em.createNamedStoredProcedureQuery("spCompanyContactActivity");
 			qContactActivities.setParameter("comID", params.getComID());
 			qContactActivities.setParameter("empID", params.getEmpID());
@@ -319,7 +321,7 @@ public class CompanyService extends ApplicationServiceBase{
 		}		
 			
 		// Get Jobs
-		if ( params.getGetJobs() == true ) {
+		if ( params.getGetJobs() ) {
 			Query qJobs = em.createNamedStoredProcedureQuery("spCompanyJobs");
 			qJobs.setParameter("comID", params.getComID());
 			qJobs.setParameter("empID", params.getEmpID());
@@ -327,7 +329,7 @@ public class CompanyService extends ApplicationServiceBase{
 		}
 		
 		// Get Projects
-		if ( params.getGetProjects() == true ) {
+		if ( params.getGetProjects() ) {
 			Query qProjects = em.createNamedStoredProcedureQuery("spCompanyProjects");
 			qProjects.setParameter("comID", params.getComID());
 			qProjects.setParameter("empID", params.getEmpID());
@@ -335,7 +337,7 @@ public class CompanyService extends ApplicationServiceBase{
 		}
 		
 		// Get marketing
-		if ( params.getGetMarketing() == true ) {		
+		if ( params.getGetMarketing() ) {		
 			Query qMarketings = em.createNamedStoredProcedureQuery("spCompanyMarketing");
 			qMarketings.setParameter("comID", params.getComID());
 			marketings = (List<SpCompanyMarketingResults>)qMarketings.getResultList();

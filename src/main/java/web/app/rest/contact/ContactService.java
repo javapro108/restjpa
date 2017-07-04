@@ -42,6 +42,7 @@ import web.app.jpamodel.contact.TblContactsDiscipline;
 import web.app.jpamodel.contact.TblContactsDisciplineKey;
 import web.app.jpamodel.contact.sp.SpContactCommentsResults;
 import web.app.jpamodel.contact.sp.SpContactJobsResults;
+import web.app.jpamodel.contact.sp.SpContactMarketingResults;
 import web.app.jpamodel.contact.sp.SpContactParams;
 import web.app.jpamodel.contact.sp.SpContactProjectsResults;
 import web.app.jpamodel.contact.sp.SpContactViewResults;
@@ -380,8 +381,8 @@ public class ContactService extends ApplicationServiceBase {
 
 		User user = (User) securityContext.getUserPrincipal();
 		if (comment != null && !comment.getCmdComment().isEmpty()) {
-		comment.setCocDate(new Date());
-		comment.setCocUser(user.getUserName());
+			comment.setCocDate(new Date());
+			comment.setCocUser(user.getUserName());
 		}
 
 		em.getTransaction().begin();
@@ -407,6 +408,7 @@ public class ContactService extends ApplicationServiceBase {
 		List<SpContactCommentsResults> comments = null;
 		List<SpContactJobsResults> jobs = null;
 		List<SpContactProjectsResults> projects = null;
+		List<SpContactMarketingResults> marketings = null;
 		List<TblContactsDiscipline> disciplines = null;
 		List<TblContactAffiliates> affiliates = null;
 		List<TblContactReps> reps = null;
@@ -475,6 +477,12 @@ public class ContactService extends ApplicationServiceBase {
 			projects = (List<SpContactProjectsResults>) qProjects.getResultList();
 		}
 		
+		if (params.getGetMarketing()) {
+			Query qMarketing = em.createNamedStoredProcedureQuery("spContactMarketing");
+			qMarketing.setParameter("conID", params.getConID());
+			marketings = (List<SpContactMarketingResults>) qMarketing.getResultList();						
+		}
+		
 
 		if (contact != null) {
 			contactDetails.setContact(contact);
@@ -496,6 +504,9 @@ public class ContactService extends ApplicationServiceBase {
 		}
 		if (projects != null) {
 			contactDetails.setProjects(projects);
+		}
+		if (marketings != null) {
+			contactDetails.setMarketings(marketings);
 		}
 
 		return contactDetails;

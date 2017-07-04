@@ -40,6 +40,9 @@ public class SpContactCommentsResults {
 
 	@Column
 	private String cmdComment;
+	
+	@Column
+	private String cmdPriority;
 
 	public String getCocID() {
 		return cocID;
@@ -81,5 +84,13 @@ public class SpContactCommentsResults {
 		this.cmdComment = cmdComment;
 	}
 	
+	public String getCmdPriority() {
+		return cmdPriority;
+	}
+
+	public void setCmdPriority(String cmdPriority) {
+		this.cmdPriority = cmdPriority;
+	}
+
 	
 }

@@ -18,6 +18,7 @@ import javax.persistence.GenerationType;
 public class TblContactComments{
 
 @Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 @Column(name="cocID",length=18)
 private long cocID;
 
