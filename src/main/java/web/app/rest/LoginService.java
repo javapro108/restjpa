@@ -55,6 +55,8 @@ public class LoginService extends ApplicationServiceBase{
 		EntityManagerFactory emf = (EntityManagerFactory)servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 		
+		uName.toUpperCase();
+		
 		employee = em.find(TblEmployees.class, uName);
 		
 		TypedQuery<TblEmpRoles> query = em.createQuery("SELECT er FROM TblEmpRoles er WHERE er.key.emrEmpUserName = :empId", TblEmpRoles.class);
@@ -68,7 +70,7 @@ public class LoginService extends ApplicationServiceBase{
 			//Validate user name and password here and create User object
 			user = new User();
 			user.setFirstName(employee.getEmpName());
-			user.setLastName("");
+			user.setLastName("");			
 			user.setUserName(uName);
 			user.setDepartment(employee.getEmpDept());
 			user.setLastLoginTime(new Date());
