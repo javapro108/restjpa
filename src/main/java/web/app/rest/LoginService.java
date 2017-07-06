@@ -48,6 +48,8 @@ public class LoginService extends ApplicationServiceBase{
 		}
 		return loginObject;
 	}
+	
+	
 	private User loginUser(String uName, String password){		
 		User user = null;
 

@@ -1,5 +1,6 @@
 package web.app.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,7 +29,9 @@ import web.app.jpamodel.common.TblPrefix;
 import web.app.jpamodel.common.TblStates;
 import web.app.jpamodel.common.TblStatusCodeAff;
 import web.app.jpamodel.common.sp.SpRepDropDown;
+import web.app.jpamodel.employee.SpEmpDistrictsResults;
 import web.app.jpamodel.employee.TblEmployees;
+import web.app.rest.common.InitAppEntity;
 
 
 @Path("/app")
@@ -50,13 +53,126 @@ public class AppService extends ApplicationServiceBase {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean unLockObject(@Context ServletContext context, LockObject lockObject) {
-		
+	public BaseEntity unLockObject(@Context ServletContext context, LockObject lockObject) {
+		BaseEntity baseEntity = new BaseEntity(); 
 		SystemServices sysService = (SystemServices) servletContext.getAttribute(AppConstants.SYSTEM_SERVICE);
-		return sysService.unLockObject(lockObject);
+		if (sysService.unLockObject(lockObject)){
+			baseEntity.addMessage("Object unlocked.");
+		} else {
+			baseEntity.addMessage("Error unlocking object");
+		}
+		return baseEntity;
 		
 	}
 	
+	
+	@Path("/initapp")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)	
+	public InitAppEntity initApp(@Context SecurityContext securityContext) {
+		
+		InitAppEntity appData = new InitAppEntity();
+		List<SpEmpDistrictsResults> districts = new ArrayList<SpEmpDistrictsResults>();
+		List<TblStates> states = null;
+		List<TblCountry> countries = null;
+		List<TblEmployees> reps = null;
+		List<SpRepDropDown> repOpts = null;
+		List<TblPrefix> prefixOpts = null;
+		List<TblDiscipline> dispOpts = null;
+		List<TblPosition> posOpts = null;
+		List<TblAffiliates> affOpts = null;
+		List<TblAffiliates> affOptsAll = null;
+		List<TblStatusCodeAff> affStatus = null;
+		
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		User user = (User)securityContext.getUserPrincipal();
+		
+		//Districts
+		Query districtsQuery = em.createNamedStoredProcedureQuery("spEmpDistricts");
+		districtsQuery.setParameter("emp", user.getUserName());		
+		districts = (List<SpEmpDistrictsResults>)districtsQuery.getResultList();
+		if ( districts != null){
+			appData.setDistricts(districts);
+		}
+
+		//States
+		TypedQuery<TblStates> statesQuery = em.createQuery("SELECT states FROM TblStates states", TblStates.class);						
+		states = (List<TblStates>)statesQuery.getResultList();
+		if ( states  != null){
+			appData.setStates(states);
+		}
+		
+		//Countries
+		TypedQuery<TblCountry> countriesQuery = em.createQuery("SELECT country FROM TblCountry country", TblCountry.class);						
+		countries = (List<TblCountry>)countriesQuery.getResultList();
+		if ( countries != null){
+			appData.setCountries(countries);
+		}
+		
+		//Reps
+		TypedQuery<TblEmployees> repsQuery = em.createQuery("Select emp from TblEmployees emp", TblEmployees.class);		
+		reps = (List<TblEmployees>)repsQuery.getResultList();
+		if ( reps != null){
+			appData.setReps(reps);
+		}
+		
+		//Reps Opts
+		Query repOptsQuery = em.createNamedStoredProcedureQuery("spRepDropDown");		
+		repOpts = (List<SpRepDropDown>)repOptsQuery.getResultList();
+		if ( repOpts != null){
+			appData.setRepOpts(repOpts);
+		}
+		
+		//Prefix Opts
+		TypedQuery<TblPrefix> prefixQuery = em.createQuery("SELECT prefix FROM TblPrefix prefix", TblPrefix.class);						
+		prefixOpts = (List<TblPrefix>)prefixQuery.getResultList();
+		if ( prefixOpts != null){
+			appData.setPrefixOpts(prefixOpts);
+		}
+		
+		//Discipline Opts
+		Query dispOptsQuery = em.createNamedStoredProcedureQuery("spDiscipline");		
+		dispOpts = (List<TblDiscipline>)dispOptsQuery.getResultList();
+		if ( dispOpts != null){
+			appData.setDispOpts(dispOpts);
+		}
+		
+		//Position Opts
+		Query posOptsQuery = em.createNamedStoredProcedureQuery("spPositionDropdown");		
+		posOpts = (List<TblPosition>)posOptsQuery.getResultList();
+		if ( posOpts != null){
+			appData.setPosOpts(posOpts);
+		}
+		
+		//Affiliate Opts
+		Query affOptsQuery = em.createNamedStoredProcedureQuery("spAffiliateDropdown");	
+		affOptsQuery.setParameter("empID", user.getUserName());
+		affOpts = (List<TblAffiliates>)affOptsQuery.getResultList();
+		if ( affOpts != null){
+			appData.setAffOpts(affOpts);
+		}
+		
+		//Affiliate Opts All
+		Query affOptsAllQuery = em.createNamedStoredProcedureQuery("spAffiliate");	
+		affOptsAll = (List<TblAffiliates>)affOptsAllQuery.getResultList();
+		if ( affOptsAll != null){
+			appData.setAffOptsAll(affOptsAll);
+		}
+		
+		//Affiliate Status
+		TypedQuery<TblStatusCodeAff> affStatusQuery = em.createQuery("SELECT affStatus FROM TblStatusCodeAff affStatus", TblStatusCodeAff.class);						
+		affStatus = (List<TblStatusCodeAff>)affStatusQuery.getResultList();	
+		if ( affStatus != null){
+			appData.setAffStatus(affStatus);
+		}		
+		
+		em.close();
+		
+		return appData;
+		
+	}
 	
 	@Path("/states")
 	@GET
@@ -239,8 +355,7 @@ public class AppService extends ApplicationServiceBase {
 		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
 		EntityManager em = emf.createEntityManager();
 		
-		TypedQuery<TblStatusCodeAff> query = em.createQuery("SELECT affStatus FROM TblStatusCodeAff affStatus", TblStatusCodeAff.class);				
-		
+		TypedQuery<TblStatusCodeAff> query = em.createQuery("SELECT affStatus FROM TblStatusCodeAff affStatus", TblStatusCodeAff.class);						
 		List<TblStatusCodeAff> affStatusses = (List<TblStatusCodeAff>)query.getResultList();
 		
 		em.close();		

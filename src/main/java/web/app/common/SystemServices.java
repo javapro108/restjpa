@@ -27,7 +27,7 @@ public class SystemServices extends Thread {
 			this.cleanLiveUsers();
 			this.cleanLocks();
 			try {
-				Thread.sleep(1800000);
+				Thread.sleep(18000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				this.runService = false;								
@@ -49,7 +49,7 @@ public class SystemServices extends Thread {
 	private void cleanLiveUsers(){
 		Date currentTime = new Date();
 		//System.out.println("Inside Clean Live Users" + currentTime);
-		synchronized(liveUsers){
+		synchronized (this.liveUsers){
 			Iterator<Entry<String, User>> it = liveUsers.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<String, User> entry = it.next();

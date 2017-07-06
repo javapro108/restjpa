@@ -483,6 +483,8 @@ public class ContactService extends ApplicationServiceBase {
 			marketings = (List<SpContactMarketingResults>) qMarketing.getResultList();						
 		}
 		
+		em.close();
+		
 
 		if (contact != null) {
 			contactDetails.setContact(contact);
@@ -507,9 +509,10 @@ public class ContactService extends ApplicationServiceBase {
 		}
 		if (marketings != null) {
 			contactDetails.setMarketings(marketings);
-		}
+		}				
 
 		return contactDetails;
+		
 	}
 
 	@Path("/findcontactadvall")
