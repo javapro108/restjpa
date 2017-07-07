@@ -132,7 +132,7 @@ public class TblCompany {
 	@Column(name = "comOldID", length = 18)
 	private long comOldID;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "comDate")
 	private Date comDate;
 

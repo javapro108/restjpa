@@ -27,7 +27,7 @@ public class SystemServices extends Thread {
 			this.cleanLiveUsers();
 			this.cleanLocks();
 			try {
-				Thread.sleep(18000);
+				Thread.sleep(1800000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				this.runService = false;								

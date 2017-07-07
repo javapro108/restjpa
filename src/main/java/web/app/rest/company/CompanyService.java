@@ -115,7 +115,7 @@ public class CompanyService extends ApplicationServiceBase{
 		User user = (User) securityContext.getUserPrincipal();
 
 		companyEntity.getCompany().setComCreatedBy(user.getUserName());
-		companyEntity.getCompany().setComDate(new Date());
+		//companyEntity.getCompany().setComDate(new Date());
 
 		//Create company always active 
 		companyEntity.getCompany().setComInactive(false);

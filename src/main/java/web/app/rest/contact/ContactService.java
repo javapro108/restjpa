@@ -147,7 +147,7 @@ public class ContactService extends ApplicationServiceBase {
 		em.getTransaction().begin();
 		
 		contactEntity.getContact().setConCreatedBy(user.getUserName());
-		contactEntity.getContact().setConDate(new Date());
+		//contactEntity.getContact().setConDate(new Date());
 		contactEntity.getContact().setConInactive(false);
 
 		em.persist(contactEntity.getContact());
