@@ -133,7 +133,7 @@ public class TblCompany {
 	private long comOldID;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "comDate")
+	@Column(name = "comDate", insertable = false, updatable = false)
 	private Date comDate;
 
 	@Column(name = "comCreatedBy", length = 10)

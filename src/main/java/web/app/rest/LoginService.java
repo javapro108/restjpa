@@ -43,7 +43,7 @@ public class LoginService extends ApplicationServiceBase{
 			loginObject.setuNamePass(""); // Clear user name password
 			loginObject.setFirstName(user.getFirstName());
 			loginObject.setLastName(user.getLastName());
-			loginObject.setUserName(user.getUserName());
+			loginObject.setUserName(user.getUserName().toUpperCase());
 			SystemServices.getInstance().addLiveUser(token, user);
 		}
 		return loginObject;

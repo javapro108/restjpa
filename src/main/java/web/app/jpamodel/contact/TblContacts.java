@@ -125,7 +125,7 @@ public class TblContacts {
 	private String conOldID;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "conDate")
+	@Column(name = "conDate", insertable = false, updatable = false)
 	private Date conDate;
 
 	@Column(name = "conCreatedBy", length = 10)
