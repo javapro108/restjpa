@@ -1,5 +1,6 @@
 package web.app.jpamodel.contact;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -107,9 +108,10 @@ public class TblContacts {
 
 	@Column(name = "conHomeEmail", length = 30)
 	private String conHomeEmail;
-
+	
+	@Basic(optional = true)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "conRevisedDate")
+	@Column(name = "conRevisedDate", nullable = true)
 	private Date conRevisedDate;
 
 	@Column(name = "conRevisedBy", length = 10)
@@ -123,7 +125,8 @@ public class TblContacts {
 
 	@Column(name = "conOldID", length = 20)
 	private String conOldID;
-
+	
+	@Basic(optional = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "conDate", insertable = false, updatable = false)
 	private Date conDate;

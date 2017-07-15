@@ -11,6 +11,7 @@ import javax.persistence.StoredProcedureParameter;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -73,9 +74,10 @@ public class TblCompany {
 
 	@Column(name = "comDirections", length = 500)
 	private String comDirections;
-
+	
+	@Basic(optional = true)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "comRevisedDate")
+	@Column(name = "comRevisedDate", nullable = true)
 	private Date comRevisedDate;
 
 	@Column(name = "comRevisedBy", length = 10)
@@ -132,6 +134,7 @@ public class TblCompany {
 	@Column(name = "comOldID", length = 18)
 	private long comOldID;
 
+	@Basic(optional = true)
 	@Temporal(TemporalType.DATE)
 	@Column(name = "comDate", insertable = false, updatable = false)
 	private Date comDate;

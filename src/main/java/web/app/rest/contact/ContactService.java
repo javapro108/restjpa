@@ -1,5 +1,7 @@
 package web.app.rest.contact;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +53,7 @@ import web.app.rest.company.CompanyEntity;
 
 @Path("/contacts")
 public class ContactService extends ApplicationServiceBase {
+
 
 	@Path("/get({id})")
 	@GET
@@ -148,8 +151,17 @@ public class ContactService extends ApplicationServiceBase {
 		
 		contactEntity.getContact().setConCreatedBy(user.getUserName());
 		//contactEntity.getContact().setConDate(new Date());
+		contactEntity.getContact().setConRevisedBy(user.getUserName());
+		contactEntity.getContact().setConRevisedDate(date_19000101);
 		contactEntity.getContact().setConInactive(false);
-
+				
+		if (contactEntity.getContact().getConBirthday() == null ){
+			contactEntity.getContact().setConBirthday(date_19000101);
+		}
+		if (contactEntity.getContact().getConAnniversary() == null ){
+			contactEntity.getContact().setConAnniversary(date_19000101);
+		}		
+		
 		em.persist(contactEntity.getContact());
 		// flush so that newly created id is reflected on entity object
 		em.flush();
@@ -191,6 +203,7 @@ public class ContactService extends ApplicationServiceBase {
 			for (TblContactReps rep : contactEntity.getReps()) {
 				if (rep.getMode().equals("I")) {
 					rep.setCorContactID(contactEntity.getContact().getConID());
+					rep.setCorLastContact(date_19000101);
 					em.persist(rep);
 				}
 			}
@@ -239,7 +252,14 @@ public class ContactService extends ApplicationServiceBase {
 
 		
 		contactEntity.getContact().setConRevisedBy(user.getUserName());
-		contactEntity.getContact().setConRevisedDate(new Date());		
+		contactEntity.getContact().setConRevisedDate(new Date());
+		
+		if (contactEntity.getContact().getConBirthday() == null ){
+			contactEntity.getContact().setConBirthday(date_19000101);
+		}
+		if (contactEntity.getContact().getConAnniversary() == null ){
+			contactEntity.getContact().setConAnniversary(date_19000101);
+		}
 		
 		em.getTransaction().begin();
 		em.merge(contactEntity.getContact());
@@ -353,9 +373,13 @@ public class ContactService extends ApplicationServiceBase {
 				
 			}
 			for (TblContactReps repIns : repsIns) {
-				em.merge(repIns);
+				repIns.setCorLastContact(date_19000101);
+				em.persist(repIns);
 			}
 			for (TblContactReps repUpd : repsUpd) {
+				if (repUpd.getCorLastContact() == null){
+					repUpd.setCorLastContact(date_19000101);
+				}
 				em.merge(repUpd);
 			}
 		}
@@ -427,7 +451,7 @@ public class ContactService extends ApplicationServiceBase {
 			qContact.setParameter("empID", params.getEmpID());
 			contactList = (List<SpContactViewResults>) qContact.getResultList();
 			if (contactList.iterator().hasNext()) {
-				contact = contactList.iterator().next();
+				contact = contactList.iterator().next();				
 			}
 			
 			// Get Contact Disciplines

@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 
@@ -36,9 +37,10 @@ public class TblContactReps {
 
 	@Column(name = "corStatus", length = 10)
 	private String corStatus;
-
+	
+	@Basic(optional = true)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "corLastContact")
+	@Column(name = "corLastContact", nullable = true)
 	private Date corLastContact;
 
 	@Transient
