@@ -24,6 +24,7 @@ import web.app.common.User;
 import web.app.jpamodel.common.TblAffiliates;
 import web.app.jpamodel.common.TblCountry;
 import web.app.jpamodel.common.TblDiscipline;
+import web.app.jpamodel.common.TblDistrict;
 import web.app.jpamodel.common.TblPosition;
 import web.app.jpamodel.common.TblPrefix;
 import web.app.jpamodel.common.TblStates;
@@ -72,15 +73,15 @@ public class AppService extends ApplicationServiceBase {
 	public InitAppEntity initApp(@Context SecurityContext securityContext) {
 		
 		InitAppEntity appData = new InitAppEntity();
-		List<SpEmpDistrictsResults> districts = new ArrayList<SpEmpDistrictsResults>();
+		List<SpEmpDistrictsResults> empDistricts = new ArrayList<SpEmpDistrictsResults>();
 		List<TblStates> states = null;
 		List<TblCountry> countries = null;
-		List<TblEmployees> reps = null;
+		List<TblEmployees> employees = null;
 		List<SpRepDropDown> repOpts = null;
 		List<TblPrefix> prefixOpts = null;
 		List<TblDiscipline> dispOpts = null;
 		List<TblPosition> posOpts = null;
-		List<TblAffiliates> affOpts = null;
+		List<TblAffiliates> empAffOpts = null;
 		List<TblAffiliates> affOptsAll = null;
 		List<TblStatusCodeAff> affStatus = null;
 		
@@ -92,9 +93,9 @@ public class AppService extends ApplicationServiceBase {
 		//Districts
 		Query districtsQuery = em.createNamedStoredProcedureQuery("spEmpDistricts");
 		districtsQuery.setParameter("emp", user.getUserName());		
-		districts = (List<SpEmpDistrictsResults>)districtsQuery.getResultList();
-		if ( districts != null){
-			appData.setDistricts(districts);
+		empDistricts = (List<SpEmpDistrictsResults>)districtsQuery.getResultList();
+		if ( empDistricts != null){
+			appData.setEmpDistricts(empDistricts);
 		}
 
 		//States
@@ -113,9 +114,12 @@ public class AppService extends ApplicationServiceBase {
 		
 		//Reps
 		TypedQuery<TblEmployees> repsQuery = em.createQuery("Select emp from TblEmployees emp", TblEmployees.class);		
-		reps = (List<TblEmployees>)repsQuery.getResultList();
-		if ( reps != null){
-			appData.setReps(reps);
+		employees = (List<TblEmployees>)repsQuery.getResultList();
+		if ( employees != null){
+			for (TblEmployees employee : employees ){
+				employee.setEmpPassword("");
+			}
+			appData.setEmployees(employees);
 		}
 		
 		//Reps Opts
@@ -149,9 +153,9 @@ public class AppService extends ApplicationServiceBase {
 		//Affiliate Opts
 		Query affOptsQuery = em.createNamedStoredProcedureQuery("spAffiliateDropdown");	
 		affOptsQuery.setParameter("empID", user.getUserName());
-		affOpts = (List<TblAffiliates>)affOptsQuery.getResultList();
-		if ( affOpts != null){
-			appData.setAffOpts(affOpts);
+		empAffOpts = (List<TblAffiliates>)affOptsQuery.getResultList();
+		if ( empAffOpts != null){
+			appData.setEmpAffOpts(empAffOpts);
 		}
 		
 		//Affiliate Opts All
@@ -174,6 +178,22 @@ public class AppService extends ApplicationServiceBase {
 		
 	}
 	
+	@Path("/districts")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<TblDistrict> spGetDistricts(@Context SecurityContext securityContext) {
+		List<TblDistrict> districts = new ArrayList<TblDistrict>();
+
+		EntityManagerFactory emf = (EntityManagerFactory) servletContext.getAttribute(AppConstants.MSSQL_EMF);
+		EntityManager em = emf.createEntityManager();
+		
+		TypedQuery<TblDistrict> distQuery = em.createQuery("SELECT dists FROM TblDistrict dists", TblDistrict.class);						
+		districts = (List<TblDistrict>) distQuery.getResultList();	
+		
+		return districts;
+	}
+
+/*	
 	@Path("/states")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)	
@@ -363,5 +383,5 @@ public class AppService extends ApplicationServiceBase {
 		return affStatusses;
 		
 	}	
-	
+*/
 }

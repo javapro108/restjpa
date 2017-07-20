@@ -50,6 +50,13 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>6.1.0.jre8</version>
 		</dependency>
+		<!-- Apache POI Dependency -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>3.16</version>
+		</dependency>
+				
 	</dependencies>
 	<build>
 		<finalName>restjpa</finalName>

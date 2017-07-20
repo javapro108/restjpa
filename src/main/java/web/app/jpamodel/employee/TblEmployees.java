@@ -2,6 +2,7 @@ package web.app.jpamodel.employee;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import web.app.jpamodel.contact.SpContactNewCheckResults;
 
@@ -52,6 +53,10 @@ public class TblEmployees {
 	@Column(name = "empAllAccess")
 	private Boolean empAllAccess;
 
+	@Transient
+	private String mode;	
+
+	
 	public String getEmpUserName() {
 		return empUserName;
 	}
@@ -147,4 +152,13 @@ public class TblEmployees {
 	public void setEmpAllAccess(Boolean empAllAccess) {
 		this.empAllAccess = empAllAccess;
 	}
+	
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
 }

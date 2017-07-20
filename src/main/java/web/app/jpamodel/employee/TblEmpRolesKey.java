@@ -39,6 +39,10 @@ public class TblEmpRolesKey implements Serializable {
 		this.emrEmpUserName = emrEmpUserName;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}	
+	
 	@Override
 	public boolean equals(Object o) {
 

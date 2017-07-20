@@ -61,7 +61,7 @@ public class LoginService extends ApplicationServiceBase{
 		
 		employee = em.find(TblEmployees.class, uName);
 		
-		TypedQuery<TblEmpRoles> query = em.createQuery("SELECT er FROM TblEmpRoles er WHERE er.key.emrEmpUserName = :empId", TblEmpRoles.class);
+		TypedQuery<TblEmpRoles> query = em.createQuery("SELECT er FROM TblEmpRoles er WHERE er.emrEmpUserName = :empId", TblEmpRoles.class);
 
 		query.setParameter("empId", uName);
 		List<TblEmpRoles> roles = query.getResultList();
@@ -79,7 +79,7 @@ public class LoginService extends ApplicationServiceBase{
 			user.setEmail(employee.getEmpEmail());		
 			if (roles != null){
 				for (TblEmpRoles role:roles){
-					user.addRole(role.getKey().getEmrRolID());
+					user.addRole(role.getEmrRolID());
 				}
 			}
 		}

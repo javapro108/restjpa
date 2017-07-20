@@ -36,6 +36,11 @@ public class TblContactAffiliatesKey implements Serializable {
 		this.cafContactID = cafContactID;
 	}	
 	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 	
 	@Override
 	public boolean equals(Object o) {
