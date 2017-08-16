@@ -132,18 +132,21 @@ public class EmployeeService extends ApplicationServiceBase {
 
 		for (TblEmpRoles empRole : employeeEntity.getEmpRoles()) {
 			if (empRole != null && empRole.getMode().equals("I")) {
+				empRole.setEmrEmpUserName(employeeEntity.getEmployee().getEmpUserName());
 				em.persist(empRole);
 			}
 		}
 
 		for (TblEmpAffiliates empAffiliate : employeeEntity.getEmpAffiliates()) {
 			if (empAffiliate != null && empAffiliate.getMode().equals("I")) {
+				empAffiliate.setEmaEmpUserName(employeeEntity.getEmployee().getEmpUserName());
 				em.persist(empAffiliate);
 			}
 		}
 
 		for (TblEmpDistricts empDistricts : employeeEntity.getEmpDistricts()) {
 			if (empDistricts != null && empDistricts.getMode().equals("I")) {
+				empDistricts.setEmdEmpUserName(employeeEntity.getEmployee().getEmpUserName());
 				em.persist(empDistricts);
 			}
 		}
@@ -171,6 +174,7 @@ public class EmployeeService extends ApplicationServiceBase {
 			em.merge(employeeEntity.getEmployee());
 		}
 
+
 		/*
 		 * Employee Roles
 		 */
@@ -196,6 +200,7 @@ public class EmployeeService extends ApplicationServiceBase {
 			}
 		}
 
+
 		/*
 		 * Employee Affiliates
 		 */
@@ -220,6 +225,7 @@ public class EmployeeService extends ApplicationServiceBase {
 				em.merge(empAffiliate);
 			}
 		}
+
 
 		/*
 		 * Employee Districts
